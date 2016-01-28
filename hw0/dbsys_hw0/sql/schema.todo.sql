@@ -45,7 +45,7 @@ create table partsupp ( ps_partkey     INTEGER,
 
 create table customer ( c_custkey     INTEGER,
                         c_name        TEXT,
-                        c_address     TEXT
+                        c_address     TEXT,
                         c_nationkey   INTEGER,
                         c_phone       TEXT,
                         c_acctbal     REAL,
