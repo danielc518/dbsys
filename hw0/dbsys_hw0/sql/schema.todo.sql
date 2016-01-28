@@ -16,8 +16,8 @@ drop table if exists region;
 -- Students should fill in the followins statements:
 
 create table part ( p_partkey     INTEGER,
-					p_name        TEXT,
-					p_mfgr        TEXT,
+                    p_name        TEXT,
+                    p_mfgr        TEXT,
                     p_brand       TEXT,
                     p_type        TEXT,
                     p_size        INTEGER,
