@@ -66,7 +66,7 @@ create table orders ( o_orderkey       INTEGER,
 
 );
 
-create table lineitem ( l_orderkey    I		INTEGER,
+create table lineitem ( l_orderkey    		INTEGER,
                         l_partkey     		INTEGER,
                         l_suppkey     		INTEGER,
                         l_linenumber  		INTEGER,
