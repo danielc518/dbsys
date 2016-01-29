@@ -10,4 +10,14 @@
 
 -- Student SQL code here:
 
+SELECT c_custkey,
+       c_name,
+       AVG(DATE(l_receiptdate) - DATE(l_shipdate))
+FROM lineitem,
+     orders,
+     customer
+WHERE l_orderkey = o_orderkey
+  AND o_custkey = c_custkey
+GROUP BY c_custkey
+ORDER BY AVG(DATE(l_receiptdate) - DATE(l_shipdate)) DESC LIMIT 10; 
 
