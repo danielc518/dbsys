@@ -9,6 +9,7 @@
 -- Student SQL code here:
 
 WITH total_quantity AS
+-- sum of quantities grouped by nation and part
   (SELECT SUM(l_quantity) AS t_quantity,
           n_nationkey,
           n_name,
@@ -24,8 +25,11 @@ WITH total_quantity AS
      AND c_nationkey = n_nationkey
      AND l_partkey = p_partkey
    GROUP BY n_nationkey,
-            l_partkey
+            n_name,
+            p_partkey,
+            p_name
    ORDER BY SUM(l_quantity))
+-- query items that have sum of quantities = max(sum of quantities)
 SELECT n_nationkey,
        n_name,
        p_partkey,
