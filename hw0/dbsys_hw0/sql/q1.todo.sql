@@ -5,4 +5,12 @@
 
 -- Student SQL code here:
 
-
+SELECT l_partkey,
+       p_name,
+       SUM(l_quantity)
+FROM lineitem,
+     part
+WHERE l_partkey = p_partkey
+  AND l_returnflag = 'R'
+GROUP BY p_partkey
+ORDER BY SUM(l_quantity) DESC LIMIT 10;
