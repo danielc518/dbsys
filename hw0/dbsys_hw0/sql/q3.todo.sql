@@ -40,4 +40,4 @@ WHERE t_quantity = max_quantity
   AND n_nationkey = t_nationkey
 ORDER BY n_nationkey,
          p_partkey ASC;
-		 
+
