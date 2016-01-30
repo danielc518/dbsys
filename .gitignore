@@ -3,3 +3,4 @@
 
 # Test output
 *.bin
+/hw0/dbsys_hw0/sql/import.sql
