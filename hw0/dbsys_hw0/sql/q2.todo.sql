@@ -10,13 +10,16 @@
 
 -- Student SQL code here:
 
-Select c.c_custkey, c.c_name, AVG(DATE(l.l_receiptdate) - DATE(l.l_shipdate)) as avwait
-from customer c, orders o, lineitem l
-where c.c_custkey = o.o_custkey
-and o.o_orderkey = l.l_orderkey
-group by c.c_custkey
-order by avwait
-desc limit 10;
+SELECT c.c_custkey,
+       c.c_name,
+       AVG(DATE(l.l_receiptdate) - DATE(l.l_shipdate)) AS avwait
+FROM customer c,
+     orders o,
+     lineitem l
+WHERE c.c_custkey = o.o_custkey
+  AND o.o_orderkey = l.l_orderkey
+GROUP BY c.c_custkey
+ORDER BY avwait DESC LIMIT 10;
 
 
 
