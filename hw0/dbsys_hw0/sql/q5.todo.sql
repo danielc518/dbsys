@@ -13,4 +13,29 @@
 
 -- Student SQL code here:
 
+WITH yearly_orders AS -- table of total number of orders per year grouped by customer market segments
+  (SELECT SUM(l_quantity) AS total_orders,
+          CAST(strftime('%Y', o_orderdate) AS INTEGER) AS o_year,
+          c_mktsegment
+   FROM lineitem,
+        orders,
+        customer
+   WHERE l_orderkey = o_orderkey
+     AND o_custkey = c_custkey
+   GROUP BY c_mktsegment,
+            o_year)
+-- Finds difference between two years by joining 'yearly_orders' with 'yearly_orders' shifted by 1 year
+-- e.g. 123|1995|MACHINERY|456|1994|MACHINERY
+SELECT t1.c_mktsegment, max_year, (t2.total_orders - t1.total_orders)
+FROM (yearly_orders t1
+      INNER JOIN yearly_orders t2 ON t1.o_year = t2.o_year + 1
+      AND t1.c_mktsegment = t2.c_mktsegment) t3,
 
+  (SELECT MAX(o_year) AS max_year,
+                         c_mktsegment
+   FROM yearly_orders
+   GROUP BY c_mktsegment) t4
+WHERE t1.o_year = t4.max_year
+  AND t1.c_mktsegment = t4.c_mktsegment
+  AND t2.total_orders - t1.total_orders > 0
+ORDER BY t1.c_mktsegment ASC;
