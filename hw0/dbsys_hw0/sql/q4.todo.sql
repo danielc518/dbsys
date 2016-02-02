@@ -12,10 +12,12 @@ FROM lineitem, orders, customer, supplier, nation,
   (SELECT c_nationkey AS placer_key,
           n_name AS placer_name,
           SUM(l_extendedprice) AS totalprice
-   FROM orders,
+   FROM lineitem,
+        orders,
         customer,
         nation
-   WHERE o_custkey = c_custkey
+   WHERE l_orderkey = o_orderkey
+     AND o_custkey = c_custkey
      AND c_nationkey = n_nationkey
    GROUP BY c_nationkey,
             placer_name
