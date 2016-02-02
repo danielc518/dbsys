@@ -12,14 +12,14 @@
 
 SELECT c.c_custkey,
        c.c_name,
-       AVG(DATE(l.l_receiptdate) - DATE(l.l_shipdate)) AS avwait
+       AVG(DATE(l.l_receiptdate) - DATE(l.l_shipdate)) AS avgwait
 FROM customer c,
      orders o,
      lineitem l
 WHERE c.c_custkey = o.o_custkey
   AND o.o_orderkey = l.l_orderkey
 GROUP BY c.c_custkey
-ORDER BY avwait DESC LIMIT 10;
+ORDER BY avgwait DESC LIMIT 10;
 
 
 
