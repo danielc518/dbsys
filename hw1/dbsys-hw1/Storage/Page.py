@@ -128,11 +128,9 @@ class PageHeader:
     self.flags           = kwargs.get("flags", b'\x00')
     self.tupleSize       = kwargs.get("tupleSize", None)
     self.pageCapacity    = kwargs.get("pageCapacity", len(buffer))
-    self.freeSpaceOffset = None
-    
-    # Assign header binary in the beginning of buffer
-    headerSize = self.headerSize();
-    buffer[0:headerSize] = self.pack();
+    self.freeSpaceOffset = kwargs.get("freeSpaceOffset", self.headerSize())
+
+    buffer[0:self.headerSize()] = self.pack()
 
   # Page header equality operation based on header fields.
   def __eq__(self, other):
@@ -198,7 +196,9 @@ class PageHeader:
   # This should cal nextFreeTuple()
   def nextTupleRange(self):
     if self.hasFreeTuple():
-      return (self.numTuples(), self.nextFreeTuple(), start + self.tupleSize);
+      tupleIndex = self.numTuples()
+      start = self.nextFreeTuple()
+      return (tupleIndex, start, start + self.tupleSize);
     else:
       return (None, None, None);
 
@@ -207,7 +207,7 @@ class PageHeader:
     start = self.headerSize() + (tupleId.tupleIndex * self.tupleSize);
     end = start + self.tupleSize;
 
-    if self.headerSize() <= start and end < self.freeSpaceOffset:
+    if self.headerSize() <= start and end <= self.freeSpaceOffset:
       return (start, end);
     else:
       return (None, None);
@@ -462,7 +462,7 @@ class Page(BytesIO):
   # The pageId of the newly constructed Page instance is given as an argument.
   @classmethod
   def unpack(cls, pageId, buffer):
-    header = cls.headerClass.unpack(buffer);
+    header = cls.headerClass.unpack(BytesIO(buffer).getbuffer())
     return cls(pageId=pageId, buffer=buffer, header=header);
 
 
