@@ -143,7 +143,7 @@ class PageHeader:
     return hash((self.flags, self.tupleSize, self.pageCapacity, self.freeSpaceOffset))
 
   def headerSize(self):
-    return self.size;
+    return self.size
 
   # Flag operations.
   def flag(self, mask):
@@ -168,15 +168,15 @@ class PageHeader:
 
   # Returns the space available in the page associated with this header.
   def freeSpace(self):
-    return self.pageCapacity - self.freeSpaceOffset;
+    return self.pageCapacity - self.freeSpaceOffset
 
   # Returns the space used in the page associated with this header.
   def usedSpace(self):
-    return self.freeSpaceOffset - self.headerSize();
+    return self.freeSpaceOffset - self.headerSize()
 
   # Returns whether the page has any free space for a tuple.
   def hasFreeTuple(self):
-    return self.tupleSize <= self.freeSpace();
+    return self.tupleSize <= self.freeSpace()
 
   # Returns the page offset of the next free tuple.
   # This should also "allocate" the tuple, such that any subsequent call
@@ -184,13 +184,13 @@ class PageHeader:
   def nextFreeTuple(self):
     if self.hasFreeTuple():
       if self.freeSpaceOffset == 0:
-        self.freeSpaceOffset = self.headerSize() + self.tupleSize;
-        return self.headerSize();
+        self.freeSpaceOffset = self.headerSize() + self.tupleSize
+        return self.headerSize()
       else:
-        self.freeSpaceOffset += self.tupleSize;
-        return self.freeSpaceOffset - self.tupleSize;
+        self.freeSpaceOffset += self.tupleSize
+        return self.freeSpaceOffset - self.tupleSize
     else:
-      return None;
+      return None
 
   # Returns a triple of (tupleIndex, start, end) for the next free tuple.
   # This should cal nextFreeTuple()
@@ -198,19 +198,19 @@ class PageHeader:
     if self.hasFreeTuple():
       tupleIndex = self.numTuples()
       start = self.nextFreeTuple()
-      return (tupleIndex, start, start + self.tupleSize);
+      return (tupleIndex, start, start + self.tupleSize)
     else:
-      return (None, None, None);
+      return (None, None, None)
 
   # Returns a pair of (start, end) for the given tupleId.
   def tupleRange(self, tupleId):
-    start = self.headerSize() + (tupleId.tupleIndex * self.tupleSize);
-    end = start + self.tupleSize;
+    start = self.headerSize() + (tupleId.tupleIndex * self.tupleSize)
+    end = start + self.tupleSize
 
     if self.headerSize() <= start and end <= self.freeSpaceOffset:
-      return (start, end);
+      return (start, end)
     else:
-      return (None, None);
+      return (None, None)
 
   # Returns a binary representation of this page header.
   def pack(self):
@@ -405,65 +405,65 @@ class Page(BytesIO):
 
   # Returns a byte string representing a packed tuple for the given tuple id.
   def getTuple(self, tupleId):
-    (start, end) = self.header.tupleRange(tupleId);
+    (start, end) = self.header.tupleRange(tupleId)
 
     if start != None and end != None:
-      return self.getbuffer()[start:end];
+      return self.getbuffer()[start:end]
     else:
-      return None;
+      return None
 
   # Updates the (packed) tuple at the given tuple id.
   def putTuple(self, tupleId, tupleData):
-    (start, end) = self.header.tupleRange(tupleId);
+    (start, end) = self.header.tupleRange(tupleId)
 
     if start != None and end != None:
-      self.getbuffer()[start:end] = tupleData;
-      self.setDirty(True);
+      self.getbuffer()[start:end] = tupleData
+      self.setDirty(True)
     else:
-      raise ValueError("There is no existing data for the given tupleId.");
+      raise ValueError("There is no existing data for the given tupleId.")
 
   # Adds a packed tuple to the page. Returns the tuple id of the newly added tuple.
   def insertTuple(self, tupleData):
-    (tupleIndex, start, end) = self.header.nextTupleRange();
+    (tupleIndex, start, end) = self.header.nextTupleRange()
     if tupleIndex != None and start != None and end != None:
-      self.getbuffer()[start:end] = tupleData;
-      self.setDirty(True);
-      return TupleId(self.pageId, tupleIndex);
+      self.getbuffer()[start:end] = tupleData
+      self.setDirty(True)
+      return TupleId(self.pageId, tupleIndex)
     else:
-      raise ValueError("Failed to insert data since the page is full.");
+      raise ValueError("Failed to insert data since the page is full.")
 
   # Zeroes out the contents of the tuple at the given tuple id.
   def clearTuple(self, tupleId):
-    (start, end) = self.header.tupleRange(tupleId);
+    (start, end) = self.header.tupleRange(tupleId)
 
     if start != None and end != None:
-      self.getbuffer()[start:end] = b'\x00' * self.header.tupleSize;
-      self.setDirty(True);
+      self.getbuffer()[start:end] = b'\x00' * self.header.tupleSize
+      self.setDirty(True)
     else:
-      raise ValueError("There is no existing data for the given tupleId.");
+      raise ValueError("There is no existing data for the given tupleId.")
 
   # Removes the tuple at the given tuple id, shifting subsequent tuples.
   def deleteTuple(self, tupleId):
-    (start, end) = self.header.tupleRange(tupleId);
+    (start, end) = self.header.tupleRange(tupleId)
 
     if start != None and end != None:
       self.getbuffer()[start:self.header.freeSpaceOffset - self.header.tupleSize] \
-        = self.getbuffer()[end:self.header.freeSpaceOffset];
-      self.header.freeSpaceOffset = self.header.freeSpaceOffset - self.header.tupleSize;
+        = self.getbuffer()[end:self.header.freeSpaceOffset]
+      self.header.freeSpaceOffset = self.header.freeSpaceOffset - self.header.tupleSize
       
   # Returns a binary representation of this page.
   # This should refresh the binary representation of the page header contained
   # within the page by packing the header in place.
   def pack(self):
-    self.getbuffer()[0:self.header.headerSize()] = self.header.pack();
-    return self.getvalue();
+    self.getbuffer()[0:self.header.headerSize()] = self.header.pack()
+    return self.getvalue()
 
   # Creates a Page instance from the binary representation held in the buffer.
   # The pageId of the newly constructed Page instance is given as an argument.
   @classmethod
   def unpack(cls, pageId, buffer):
     header = cls.headerClass.unpack(BytesIO(buffer).getbuffer())
-    return cls(pageId=pageId, buffer=buffer, header=header);
+    return cls(pageId=pageId, buffer=buffer, header=header)
 
 
 
