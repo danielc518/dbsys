@@ -193,7 +193,6 @@ class PageHeader:
         return self.freeSpaceOffset - self.tupleSize;
     else:
       return None;
-      
 
   # Returns a triple of (tupleIndex, start, end) for the next free tuple.
   # This should cal nextFreeTuple()
@@ -212,7 +211,6 @@ class PageHeader:
       return (start, end);
     else:
       return (None, None);
-
 
   # Returns a binary representation of this page header.
   def pack(self):
