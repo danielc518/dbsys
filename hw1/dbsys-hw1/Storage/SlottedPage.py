@@ -100,8 +100,6 @@ class SlottedPageHeader(PageHeader):
 
       if self.slots is None:
         self.slots = memoryview(buffer[headerSize:headerSize + math.ceil(0.125*self.numSlots)])
-      else:
-        self.slots = memoryview(self.slots)
       
       self.reprSize = headerSize + self.slots.nbytes
       
@@ -247,6 +245,7 @@ class SlottedPageHeader(PageHeader):
     pageHeader = PageHeader.unpack(buffer)
     numSlots = Struct("H").unpack_from(buffer, offset=PageHeader.size)[0]
     slots = Struct("H"+str(math.ceil(0.125*numSlots))+"s").unpack_from(buffer, offset=PageHeader.size)[1]
+    slots = memoryview(slots)
     return cls(flags=pageHeader.flags, tupleSize=pageHeader.tupleSize, buffer=buffer, numSlots=numSlots, slots=slots)
 
 
