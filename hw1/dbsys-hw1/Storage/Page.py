@@ -407,7 +407,7 @@ class Page(BytesIO):
   def getTuple(self, tupleId):
     (start, end) = self.header.tupleRange(tupleId)
 
-    if start != None and end != None:
+    if start is not None and end is not None:
       return self.getbuffer()[start:end]
     else:
       return None
@@ -416,7 +416,7 @@ class Page(BytesIO):
   def putTuple(self, tupleId, tupleData):
     (start, end) = self.header.tupleRange(tupleId)
 
-    if start != None and end != None:
+    if start is not None and end is not None:
       self.getbuffer()[start:end] = tupleData
       self.setDirty(True)
     else:
@@ -425,7 +425,7 @@ class Page(BytesIO):
   # Adds a packed tuple to the page. Returns the tuple id of the newly added tuple.
   def insertTuple(self, tupleData):
     (tupleIndex, start, end) = self.header.nextTupleRange()
-    if tupleIndex != None and start != None and end != None:
+    if tupleIndex is not None and start is not None and end is not None:
       self.getbuffer()[start:end] = tupleData
       self.setDirty(True)
       return TupleId(self.pageId, tupleIndex)
@@ -436,7 +436,7 @@ class Page(BytesIO):
   def clearTuple(self, tupleId):
     (start, end) = self.header.tupleRange(tupleId)
 
-    if start != None and end != None:
+    if start is not None and end is not None:
       self.getbuffer()[start:end] = b'\x00' * self.header.tupleSize
       self.setDirty(True)
     else:
@@ -446,7 +446,7 @@ class Page(BytesIO):
   def deleteTuple(self, tupleId):
     (start, end) = self.header.tupleRange(tupleId)
 
-    if start != None and end != None:
+    if start is not None and end is not None:
       self.getbuffer()[start:self.header.freeSpaceOffset - self.header.tupleSize] \
         = self.getbuffer()[end:self.header.freeSpaceOffset]
       self.header.freeSpaceOffset = self.header.freeSpaceOffset - self.header.tupleSize
