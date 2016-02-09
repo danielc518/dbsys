@@ -404,7 +404,7 @@ class StorageFile:
   def updateFreePages(self, page):
     if page.header.hasFreeTuple():
       self.freePages.add(page.pageId)
-     else:
+    else:
       self.freePages.discard(page.pageId)
 
   # Iterators
