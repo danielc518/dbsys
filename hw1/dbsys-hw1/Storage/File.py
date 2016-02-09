@@ -273,7 +273,8 @@ class StorageFile:
       else:
         raise ValueError("Failed to create file header.")
 
-    self.pageHeaderSize = None
+    page = self.pageClass()(pageId=PageId(0,0), buffer=bytes(self.pageSize()), schema=self.schema())
+    self.pageHeaderSize = page.header.headerSize()
 
     ######################################################################################
     # DESIGN QUESTION: what data structure do you use to keep track of the free pages?
@@ -325,7 +326,7 @@ class StorageFile:
 
   # Reads a page header from disk.
   def readPageHeader(self, pageId):
-    if self.validPageId(pageId) and self.pageHeaderSize is not None:
+    if self.validPageId(pageId):
       pageOffset = self.pageOffset(pageId)
       self.file.seek(pageOffset)
     
@@ -339,8 +340,7 @@ class StorageFile:
   # Writes a page header to disk.
   # The page must already exist, that is we cannot extend the file with only a page header.
   def writePageHeader(self, page):
-    if self.validPageId(pageId.pageId):
-      self.pageHeaderSize = page.header.headerSize()
+    if self.validPageId(pageId):
       self.file.seek(self.pageOffset(page.pageId))
       self.file.write(page.header.pack())
       self.flush()
