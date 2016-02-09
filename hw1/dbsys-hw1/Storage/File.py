@@ -255,14 +255,27 @@ class StorageFile:
     # The file should be opened depending on the desired mode of operation.
     # The file header may come from the file contents (i.e., if the file already exists),
     # otherwise it should be created from scratch.
-    self.header    = None
-    self.file      = None
+    if os.path.exists(filePath):
+      if mode == "update":
+        self.file   = open(self.filePath, "r+b");
+        self.header = FileHeader.fromFile(self.file);
+      elif mode == "truncate":
+        self.file   = open(self.filePath, "w+b");
+        self.header = FileHeader.fromFile(self.file);
+      else:
+        raise ValueError("Failed to create file header.")
+    else:
+      if mode == "create":
+        self.file   = open(self.filePath, "w+b");
+        self.header = FileHeader(pageSize=pageSize, pageClass=pageClass, schema=schema);
+        self.file.write(self.header.pack());
+        self.flush();
+      else:
+        raise ValueError("Failed to create file header.")
 
     ######################################################################################
     # DESIGN QUESTION: what data structure do you use to keep track of the free pages?
-    self.freePages = None
-    
-    raise NotImplementedError
+    self.freePages = set()
 
 
   # File control
@@ -290,10 +303,10 @@ class StorageFile:
     return os.path.getsize(self.filePath)
 
   def headerSize(self):
-    raise NotImplementedError
+    raise self.header.size
 
   def numPages(self):
-    raise NotImplementedError
+    raise math.floor((self.size() - self.headerSize()) / self.pageSize())
 
   # Returns the offset in the file corresponding to the given page id.
   # Notice this assumes the header is written before the first page,
@@ -310,45 +323,89 @@ class StorageFile:
 
   # Reads a page header from disk.
   def readPageHeader(self, pageId):
-    raise NotImplementedError
+    if self.validPageId(pageId):
+      pageOffset = self.pageOffset(pageId)
+      self.file.seek(pageOffset)
+    
+      headerSize = self.pageClass().header.headerSize()
+      readBytes = self.file.read(headerSize)
+      bytesIo = io.BytesIO(readBytes)
+
+      return self.pageClass().headerClass.unpack(bytesIo)
+    else:
+      raise ValueError("Failed to read page header: invalid page ID.")
 
   # Writes a page header to disk.
   # The page must already exist, that is we cannot extend the file with only a page header.
   def writePageHeader(self, page):
-    raise NotImplementedError
+    if self.validPageId(pageId):
+      self.file.seek(self.pageOffset(page.pageId))
+      self.file.write(page.header.pack())
+      self.flush()
+    else:
+      raise ValueError("Failed to write page header: invalid page ID.")
 
 
   # Page operations
 
   def readPage(self, pageId, page):
-    raise NotImplementedError
+    if self.validPageId(pageId):
+      pageOffset = self.pageOffset(pageId)
+      self.file.seek(pageOffset)
+      self.file.readinto(page)
+      pageObj = self.pageClass().unpack(page)
+      updateFreePages(pageObj)
+      return pageObj
 
   def writePage(self, page):
-    raise NotImplementedError
+    pageOffset = self.pageOffset(pageId)
+    self.file.seek(pageOffset)
+    self.file.write(page.pack())
+    self.flush()
+    updateFreePages(page)
 
   # Adds a new page to the file by writing past its end.
   def allocatePage(self):
-    raise NotImplementedError
+    lastPageIndex = self.numPages()
+    pageId = self.pageId(lastPageIndex)
+    page = self.pageClass()(pageId=pageId, buffer=bytes(self.pageSize()), schema=self.schema())
+    self.writePage(page)
+    return page
 
   # Returns the page id of the first page with available space.
   def availablePage(self):
-    raise NotImplementedError
+    if len(self.freePages) == 0:
+      self.allocatePage()
+    for freePageId in self.freePages:
+      return freePageId
 
 
   # Tuple operations
 
   # Inserts the given tuple to the first available page.
   def insertTuple(self, tupleData):
-    raise NotImplementedError
+    pageId  = self.availablePage()
+    page = self.bufferPool.getPage(pageId)
+    page.insertTuple(tupleData)
+    updateFreePages(page)
 
   # Removes the tuple by its id, tracking if the page is now free
   def deleteTuple(self, tupleId):
-    raise NotImplementedError
+    page = self.bufferPool.getPage(tupleId.pageId)
+    page.deleteTuple(tupleId)
+    updateFreePages(page)
 
   # Updates the tuple by id
   def updateTuple(self, tupleId, tupleData):
-    raise NotImplementedError
+    page = self.bufferPool.getPage(tupleId.pageId)
+    page.putTuple(tupleId, tupleData)
 
+  # Updates the set of free pages
+  def updateFreePages(self, page):
+    if page.header.hasFreeTuple():
+      self.freePages.add(page.pageId)
+     else:
+      self.freePages.discard(page.pageId)
 
   # Iterators
   # Page header iterator

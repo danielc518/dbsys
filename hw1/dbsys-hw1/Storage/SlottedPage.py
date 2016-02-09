@@ -393,7 +393,7 @@ class SlottedPage(Page):
 
     return self.getTuple(TupleId(self.pageId, slotIndex))
 
-  # Removes the tuple at the given tuple id, shifting subsequent tuples.
+  # Removes (i.e. clears) the tuple at the given tuple id
   def deleteTuple(self, tupleId):
     self.clearTuple(tupleId)
     self.header.resetSlot(tupleId.tupleIndex)
