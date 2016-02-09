@@ -43,7 +43,7 @@ class BufferPool:
 
     ####################################################################################
     # DESIGN QUESTION: what other data structures do we need to keep in the buffer pool?
-    self.freeList     = list()
+    self.freeList     = list(range(self.numPages()))
     self.pageDict     = OrderedDict()
 
 
@@ -105,7 +105,7 @@ class BufferPool:
   # We implement LRU through the use of an OrderedDict, and by moving pages
   # to the end of the ordering every time it is accessed through getPage()
   def evictPage(self):
-    (page, offset) = self.pageDict.pop(0)
+    (page, offset) = list(self.pageDict.values())[0]
     self.flushPage(page.pageId)
 
   def readFreePage(self, pageId):

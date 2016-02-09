@@ -309,7 +309,7 @@ class StorageFile:
     return self.header.size
 
   def numPages(self):
-    return math.floor((self.size() - self.headerSize()) / self.pageSize())
+    return int(math.floor((self.size() - self.headerSize()) / self.pageSize()))
 
   # Returns the offset in the file corresponding to the given page id.
   # Notice this assumes the header is written before the first page,
@@ -333,7 +333,7 @@ class StorageFile:
       readBytes = self.file.read(self.pageHeaderSize)
       bytesIo = io.BytesIO(readBytes)
 
-      return self.pageClass().headerClass.unpack(bytesIo)
+      return self.pageClass().headerClass.unpack(bytesIo.getbuffer())
     else:
       raise ValueError("Failed to read page header: invalid page ID.")
 
