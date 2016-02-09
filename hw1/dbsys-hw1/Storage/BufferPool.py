@@ -39,10 +39,12 @@ class BufferPool:
     self.pageSize     = kwargs.get("pageSize", io.DEFAULT_BUFFER_SIZE)
     self.poolSize     = kwargs.get("poolSize", BufferPool.defaultPoolSize)
     self.pool         = io.BytesIO(b'\x00' * self.poolSize)
+    self.fileMgr      = None
 
     ####################################################################################
     # DESIGN QUESTION: what other data structures do we need to keep in the buffer pool?
-    self.freeList     = None
+    self.freeList     = list()
+    self.pageDict     = OrderedDict()
 
 
   def setFileManager(self, fileMgr):
@@ -54,7 +56,7 @@ class BufferPool:
     return math.floor(self.poolSize / self.pageSize)
 
   def numFreePages(self):
-    raise NotImplementedError
+    raise len(self.freeList)
 
   def size(self):
     return self.poolSize
@@ -69,25 +71,49 @@ class BufferPool:
   # Buffer pool operations
 
   def hasPage(self, pageId):
-    raise NotImplementedError
+    return pageId in self.pageDict
   
   def getPage(self, pageId):
-    raise NotImplementedError
+    if not self.hasPage(pageId):
+      if len(self.freeList) == 0:
+        self.evictPage()
+
+      page = self.readFreePage(pageId)
+    
+    self.pageDict.move_to_end(pageId)
+    (page, _) = self.pageDict[pageId]
+    
+    return page
 
   # Removes a page from the page map, returning it to the free 
   # page list without flushing the page to the disk.
   def discardPage(self, pageId):
-    raise NotImplementedError
+    if self.hasPage(pageId):
+      (page, offset) = self.pageDict[pageId]
+      self.pageDict.pop(pageId, None)
+      self.freeList.append(offset)
+      return page
+    else:
+      return None
 
   def flushPage(self, pageId):
-    raise NotImplementedError
+    page = self.discardPage(pageId)
+    if page is not None:
+      self.fileMgr.writePage(page)
 
   # Evict using LRU policy. 
   # We implement LRU through the use of an OrderedDict, and by moving pages
   # to the end of the ordering every time it is accessed through getPage()
   def evictPage(self):
-    raise NotImplementedError
+    (page, offset) = self.pageDict.pop(0)
+    self.flushPage(page.pageId)
 
+  def readFreePage(self, pageId):
+    offset = self.freeList.pop()
+    buffer = self.pool.getbuffer()[offset:offset+self.pageSize]
+    page   = self.fileMgr.readPage(pageId, buffer)
+    self.pageDict[pageId] = (page, offset)
+    return page
 
 if __name__ == "__main__":
     import doctest
