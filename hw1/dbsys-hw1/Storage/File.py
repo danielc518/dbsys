@@ -255,7 +255,7 @@ class StorageFile:
     # The file should be opened depending on the desired mode of operation.
     # The file header may come from the file contents (i.e., if the file already exists),
     # otherwise it should be created from scratch.
-    if os.path.exists(filePath):
+    if os.path.exists(self.filePath):
       if mode == "update":
         self.file   = open(self.filePath, "r+b");
         self.header = FileHeader.fromFile(self.file);
@@ -303,10 +303,10 @@ class StorageFile:
     return os.path.getsize(self.filePath)
 
   def headerSize(self):
-    raise self.header.size
+    return self.header.size
 
   def numPages(self):
-    raise math.floor((self.size() - self.headerSize()) / self.pageSize())
+    return math.floor((self.size() - self.headerSize()) / self.pageSize())
 
   # Returns the offset in the file corresponding to the given page id.
   # Notice this assumes the header is written before the first page,
@@ -353,16 +353,16 @@ class StorageFile:
       pageOffset = self.pageOffset(pageId)
       self.file.seek(pageOffset)
       self.file.readinto(page)
-      pageObj = self.pageClass().unpack(page)
-      updateFreePages(pageObj)
+      pageObj = self.pageClass().unpack(pageId, page)
+      self.updateFreePages(pageObj)
       return pageObj
 
   def writePage(self, page):
-    pageOffset = self.pageOffset(pageId)
+    pageOffset = self.pageOffset(page.pageId)
     self.file.seek(pageOffset)
     self.file.write(page.pack())
     self.flush()
-    updateFreePages(page)
+    self.updateFreePages(page)
 
   # Adds a new page to the file by writing past its end.
   def allocatePage(self):
@@ -387,13 +387,13 @@ class StorageFile:
     pageId  = self.availablePage()
     page = self.bufferPool.getPage(pageId)
     page.insertTuple(tupleData)
-    updateFreePages(page)
+    self.updateFreePages(page)
 
   # Removes the tuple by its id, tracking if the page is now free
   def deleteTuple(self, tupleId):
     page = self.bufferPool.getPage(tupleId.pageId)
     page.deleteTuple(tupleId)
-    updateFreePages(page)
+    self.updateFreePages(page)
 
   # Updates the tuple by id
   def updateTuple(self, tupleId, tupleData):
