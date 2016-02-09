@@ -384,7 +384,7 @@ class StorageFile:
 
   # Inserts the given tuple to the first available page.
   def insertTuple(self, tupleData):
-    pageId  = self.availablePage()
+    pageId = self.availablePage()
     page = self.bufferPool.getPage(pageId)
     page.insertTuple(tupleData)
     self.updateFreePages(page)

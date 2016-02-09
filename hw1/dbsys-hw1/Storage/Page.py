@@ -419,8 +419,6 @@ class Page(BytesIO):
     if start is not None and end is not None:
       self.getbuffer()[start:end] = tupleData
       self.setDirty(True)
-    else:
-      raise ValueError("There is no existing data for the given tupleId.")
 
   # Adds a packed tuple to the page. Returns the tuple id of the newly added tuple.
   def insertTuple(self, tupleData):
@@ -429,8 +427,6 @@ class Page(BytesIO):
       self.getbuffer()[start:end] = tupleData
       self.setDirty(True)
       return TupleId(self.pageId, tupleIndex)
-    else:
-      raise ValueError("Failed to insert data since the page is full.")
 
   # Zeroes out the contents of the tuple at the given tuple id.
   def clearTuple(self, tupleId):
@@ -439,8 +435,6 @@ class Page(BytesIO):
     if start is not None and end is not None:
       self.getbuffer()[start:end] = b'\x00' * self.header.tupleSize
       self.setDirty(True)
-    else:
-      raise ValueError("There is no existing data for the given tupleId.")
 
   # Removes the tuple at the given tuple id, shifting subsequent tuples.
   def deleteTuple(self, tupleId):
