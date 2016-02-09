@@ -56,7 +56,7 @@ class BufferPool:
     return math.floor(self.poolSize / self.pageSize)
 
   def numFreePages(self):
-    raise len(self.freeList)
+    return len(self.freeList)
 
   def size(self):
     return self.poolSize
