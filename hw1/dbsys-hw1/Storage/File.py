@@ -386,10 +386,10 @@ class StorageFile:
 
   # Inserts the given tuple to the first available page.
   def insertTuple(self, tupleData):
-    pageId = self.availablePage()
-    page = self.bufferPool.getPage(pageId)
-    page.insertTuple(tupleData)
+    page = self.bufferPool.getPage(self.availablePage())
+    tupleId = page.insertTuple(tupleData)
     self.updateFreePages(page)
+    return tupleId
 
   # Removes the tuple by its id, tracking if the page is now free
   def deleteTuple(self, tupleId):
