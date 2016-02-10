@@ -257,19 +257,19 @@ class StorageFile:
     # otherwise it should be created from scratch.
     if os.path.exists(self.filePath):
       if mode == "update":
-        self.file   = open(self.filePath, "r+b");
-        self.header = FileHeader.fromFile(self.file);
+        self.file   = open(self.filePath, "r+b")
+        self.header = FileHeader.fromFile(self.file)
       elif mode == "truncate":
-        self.file   = open(self.filePath, "w+b");
-        self.header = FileHeader.fromFile(self.file);
+        self.file   = open(self.filePath, "w+b")
+        self.header = FileHeader.fromFile(self.file)
       else:
         raise ValueError("Failed to create file header.")
     else:
       if mode == "create":
-        self.file   = open(self.filePath, "w+b");
-        self.header = FileHeader(pageSize=pageSize, pageClass=pageClass, schema=schema);
-        self.file.write(self.header.pack());
-        self.flush();
+        self.file   = open(self.filePath, "w+b")
+        self.header = FileHeader(pageSize=pageSize, pageClass=pageClass, schema=schema)
+        self.file.write(self.header.pack())
+        self.flush()
       else:
         raise ValueError("Failed to create file header.")
 
@@ -343,7 +343,6 @@ class StorageFile:
     if self.validPageId(pageId):
       self.file.seek(self.pageOffset(page.pageId))
       self.file.write(page.header.pack())
-      self.flush()
     else:
       raise ValueError("Failed to write page header: invalid page ID.")
 
@@ -363,7 +362,6 @@ class StorageFile:
     pageOffset = self.pageOffset(page.pageId)
     self.file.seek(pageOffset)
     self.file.write(page.pack())
-    self.flush()
     self.updateFreePages(page)
 
   # Adds a new page to the file by writing past its end.
