@@ -163,7 +163,7 @@ class SlottedPageHeader(PageHeader):
       byteChunk = self.slots[self.slotByteOffset(slotIndex)]
       return bool(self.getBit(byteChunk, slotIndex % 8))
     else:
-      raise ValueError("There is no slot for the given index.")
+      return False
 
   def setSlot(self, slotIndex, slot):
     if self.hasSlot(slotIndex):
@@ -217,8 +217,12 @@ class SlottedPageHeader(PageHeader):
       return (slotIndex, start, start + self.tupleSize)
 
   def tupleRange(self, tupleId):
-    start = self.offsetOfSlot(tupleId.tupleIndex)
-    return (start, start + self.tupleSize)
+    slotIndex = tupleId.tupleIndex
+    if self.getSlot(slotIndex):
+      start = self.offsetOfSlot(tupleId.tupleIndex)
+      return (start, start + self.tupleSize)
+    else:
+      return (None, None)
 
   # Reference: https://wiki.python.org/moin/BitManipulation
   def setBit(self, int_type, offset):
