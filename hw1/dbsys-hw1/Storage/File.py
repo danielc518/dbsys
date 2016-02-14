@@ -311,6 +311,12 @@ class StorageFile:
   def numPages(self):
     return int(math.floor((self.size() - self.headerSize()) / self.pageSize()))
 
+  def numTuples(self):
+    numTuples = 0
+    for tup in self.tuples()
+      numTuples += 1
+    return numTuples
+
   # Returns the offset in the file corresponding to the given page id.
   # Notice this assumes the header is written before the first page,
   # and is not part of the first page itself.
