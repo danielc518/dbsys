@@ -1,6 +1,7 @@
 import io, math, os, os.path, pickle, struct
 from struct import Struct
 
+from collections         import OrderedDict
 from Catalog.Identifiers import PageId, FileId, TupleId
 from Catalog.Schema      import DBSchema
 from Storage.Page        import PageHeader, Page
@@ -278,7 +279,7 @@ class StorageFile:
 
     ######################################################################################
     # DESIGN QUESTION: what data structure do you use to keep track of the free pages?
-    self.freePages = set()
+    self.freePages = OrderedDict()
 
 
   # File control
@@ -313,7 +314,7 @@ class StorageFile:
 
   def numTuples(self):
     numTuples = 0
-    for tup in self.tuples()
+    for tup in self.tuples():
       numTuples += 1
     return numTuples
 
@@ -376,14 +377,14 @@ class StorageFile:
     pageId = self.pageId(lastPageIndex)
     page = self.pageClass()(pageId=pageId, buffer=bytes(self.pageSize()), schema=self.schema())
     self.writePage(page)
+    self.flush()
     return page
 
   # Returns the page id of the first page with available space.
   def availablePage(self):
     if len(self.freePages) == 0:
       self.allocatePage()
-    for freePageId in self.freePages:
-      return freePageId
+    return list(self.freePages.keys())[0]
 
 
   # Tuple operations
@@ -409,9 +410,9 @@ class StorageFile:
   # Updates the set of free pages
   def updateFreePages(self, page):
     if page.header.hasFreeTuple():
-      self.freePages.add(page.pageId)
+      self.freePages[page.pageId] = None
     else:
-      self.freePages.discard(page.pageId)
+      self.freePages.pop(page.pageId, None)
 
   # Iterators
   # Page header iterator
