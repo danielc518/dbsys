@@ -115,6 +115,11 @@ class BufferPool:
     self.pageDict[pageId] = (page, offset)
     return page
 
+  def clear(self):
+    for (pageId, (page, offset)) in self.pageDict.items():
+      if page.isDirty():
+        self.flushPage(pageId)
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
