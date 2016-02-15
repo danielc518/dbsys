@@ -116,9 +116,9 @@ class BufferPool:
     return page
 
   def clear(self):
-    for (pageId, (page, offset)) in self.pageDict.items():
-      if page.isDirty():
-        self.flushPage(pageId)
+    for key, value in self.pageDict.items():
+      if value[0].isDirty():
+        self.flushPage(key)
 
 if __name__ == "__main__":
     import doctest
