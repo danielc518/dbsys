@@ -30,7 +30,7 @@ def plotLines(data):
 
 def labelLines(lines):
   index = 0
-  for pageType in [ 'Page', 'SlottedPage' ]:
+  for pageType in [ 'Page' ]:
     for pageSize in [4, 32]:
       for mode in [1, 2, 3, 4]: 
         plt.setp(lines[index], label = "{}, {}KB, Mode {}".format(pageType, pageSize, mode))

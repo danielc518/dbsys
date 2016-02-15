@@ -26,6 +26,3 @@ datadir = '/home/cs416/datasets/tpch-sf0.1'
 
 StorageFile.defaultPageClass = Page
 runWorkload()
-
-StorageFile.defaultPageClass = SlottedPage
-runWorkload()
