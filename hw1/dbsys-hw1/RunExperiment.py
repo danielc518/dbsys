@@ -19,10 +19,8 @@ def runWorkload():
   for pageSize in [4096, 32768]:
     for mode in [1, 2, 3, 4]:
       for scale in [0.2, 0.4, 0.6, 0.8, 1.0]:
-        WorkloadGenerator().runWorkload(datadir, scale, pageSize, mode)
+        WorkloadGenerator().runWorkload('/home/cs416/datasets/tpch-sf0.1', scale, pageSize, mode)
         print("Disk usage: {}".format(diskUsage()))
-
-datadir = '/home/cs416/datasets/tpch-sf0.1'
 
 StorageFile.defaultPageClass = Page
 runWorkload()
