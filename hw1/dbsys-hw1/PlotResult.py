@@ -36,8 +36,8 @@ def labelLines(lines):
         plt.setp(lines[index], label = "{}, {}KB, Mode {}".format(pageType, pageSize, mode))
         index += 1
 
-def createPlot(data, label, fileName):
-  plt.figure(1)
+def createPlot(figNum, data, label, fileName):
+  plt.figure(figNum)
   plt.xlabel('Scale Factor')
   plt.ylabel(label)
 
@@ -47,5 +47,5 @@ def createPlot(data, label, fileName):
 
   plt.savefig(fileName)
 
-createPlot(throughput, 'Throughput', 'throughput.png')
-createPlot(diskUsage, 'Disk Usage (KB)', 'disk_usage.png')
+createPlot(1, throughput, 'Throughput', 'throughput.png')
+createPlot(2, diskUsage, 'Disk Usage (KB)', 'disk_usage.png')
