@@ -94,10 +94,13 @@ class Join(Operator):
 
   # Iterator abstraction for join operator.
   def __iter__(self):
-    raise NotImplementedError
+    self.initializeOutput()
+    # Pipelined join operator is not supported according to constructor
+    self.outputIterator = self.processAllPages()
+    return self
 
   def __next__(self):
-    raise NotImplementedError
+    return next(self.outputIterator)
 
   # Page-at-a-time operator processing
   def processInputPage(self, pageId, page):
@@ -120,34 +123,73 @@ class Join(Operator):
     else:
       raise ValueError("Invalid join method in join operator")
 
+  # Return an iterator to the output relation
+  def outputRelationIterator(self):
+    return self.storage.pages(self.relationId())
+
 
   ##################################
   #
   # Nested loops implementation
   #
   def nestedLoops(self):
-    for (lPageId, lhsPage) in iter(self.lhsPlan):
+    self.runNestedLoops(iter(self.lhsPlan), iter(self.rhsPlan), False, False, False)
+    # Return an iterator to the output relation
+    return self.outputRelationIterator()
+
+  # Common function used by all types of joins
+  def runNestedLoops(self, lhsPageIter, rhsPageIter, isBlock, isIndex, isHash):
+    for (lPageId, lhsPage) in lhsPageIter:
       for lTuple in lhsPage:
         # Load the lhs once per inner loop.
         joinExprEnv = self.loadSchema(self.lhsSchema, lTuple)
 
-        for (rPageId, rhsPage) in iter(self.rhsPlan):
-          for rTuple in rhsPage:
+        if isIndex:
+          keyData = self.lhsSchema.projectBinary(lTuple, self.lhsKeySchema)
+          idxManager = self.storage.fileMgr.indexManager
+          rhsPageIter = idxManager.lookupByIndex(self.indexId, keyData)
+
+        for rhsItem in rhsPageIter:
+          rhsTupleIter = None
+
+          if isIndex:
+            # Retrieve index-matched tuple from corresponding page
+            page = self.storage.bufferPool.getPage(rhsItem.pageId) # rhsItem = rhsTupId
+            rhsTupleIter = [page.getTuple(rhsItem)]
+          else:
+            # Need to scan all tuples
+            rhsTupleIter = rhsItem[1] # rhsItem = (rPageId, rhsPage)
+
+          for rTuple in rhsTupleIter:
             # Load the RHS tuple fields.
             joinExprEnv.update(self.loadSchema(self.rhsSchema, rTuple))
 
             # Evaluate the join predicate, and output if we have a match.
-            if eval(self.joinExpr, globals(), joinExprEnv):
+            validJoin = False
+
+            if isIndex:
+              validJoin = True
+            else:
+              if isHash:
+                lhsKeyData = self.lhsSchema.projectBinary(lTuple, self.lhsKeySchema)
+                rhsKeyData = self.rhsSchema.projectBinary(rTuple, self.rhsKeySchema)
+                validJoin = lhsKeyData == rhsKeyData
+              else:
+                validJoin = True
+
+            if self.joinExpr:
+              validJoin = validJoin and eval(self.joinExpr, globals(), joinExprEnv)
+
+            if validJoin:
               outputTuple = self.joinSchema.instantiate(*[joinExprEnv[f] for f in self.joinSchema.fields])
               self.emitOutputTuple(self.joinSchema.pack(outputTuple))
 
         # No need to track anything but the last output page when in batch mode.
         if self.outputPages:
           self.outputPages = [self.outputPages[-1]]
-
-    # Return an iterator to the output relation
-    return self.storage.pages(self.relationId())
-
+      
+      if isBlock:
+        self.storage.bufferPool.unpinPage(lPageId)
 
   ##################################
   #
@@ -160,26 +202,80 @@ class Join(Operator):
   # This method pins pages in the buffer pool during its access.
   # We track the page ids in the block to unpin them after processing the block.
   def accessPageBlock(self, bufPool, pageIterator):
-    raise NotImplementedError
+    pinnedPages = list()
+    try:
+      while bufPool.numFreePages() > 0:
+        (lPageId, lhsPage) = next(pageIterator)
+        bufPool.pinPage(lPageId)
+        pinnedPages.append((lPageId, lhsPage))
+    except StopIteration:
+      pass
+    return pinnedPages
+
+  def pinPages(self, pageIterator):
+    return self.accessPageBlock(self.storage.bufferPool, pageIterator)
 
   def blockNestedLoops(self):
-    raise NotImplementedError
+    self.runBlockNestedLoops(iter(self.lhsPlan), self.rhsPlan, False)
+    return self.outputRelationIterator()
 
+  def runBlockNestedLoops(self, lhsPageIter, rhsPageIter, isHashJoin):
+    pinnedPages = self.pinPages(lhsPageIter)
+    # Keep running untill ALL pages have been loaded
+    # Note: 'rhsPageIter' should be 'list' type NOT 'iter'
+    while len(pinnedPages) > 0:
+      self.runNestedLoops(iter(pinnedPages), rhsPageIter, True, False, isHashJoin)
+      pinnedPages = self.pinPages(lhsPageIter)
 
   ##################################
   #
   # Indexed nested loops implementation
   #
-  # TODO: test
   def indexedNestedLoops(self):
-    raise NotImplementedError
+    self.runNestedLoops(iter(self.lhsPlan), None, False, True, False)
+    return self.outputRelationIterator()
 
   ##################################
   #
   # Hash join implementation.
   #
   def hashJoin(self):
-    raise NotImplementedError
+    lhsRelIdMap = {}
+    rhsRelIdMap = {}
+
+    # Partition each relation using hash function
+    self.partition(self.lhsPlan, self.lhsHashFn, self.lhsSchema, lhsRelIdMap, "lhs")
+    self.partition(self.rhsPlan, self.rhsHashFn, self.rhsSchema, rhsRelIdMap, "rhs")
+
+    # Perform block nested loop join for each bucket
+    for hashValue, relId in lhsRelIdMap.items():
+      lhsPageIter = self.storage.pages(relId)
+      rhsPageIter = self.storage.pages(rhsRelIdMap[hashValue])
+
+      self.runBlockNestedLoops(lhsPageIter, list(rhsPageIter), True)
+
+    # Remove partitions
+    partitionIter = itertools.chain(lhsRelIdMap.items(), rhsRelIdMap.items())
+    for _, relId in partitionIter:
+      self.storage.removeRelation(relId)
+
+    return self.outputRelationIterator()
+        
+  # Partitions a given relation based on some hash function 
+  def partition(self, plan, hashFn, schema, relIdMap, relPrefix):
+    for (pageId, page) in iter(plan):
+      for tuple in page:
+        # Compute hash value for every tuple
+        fieldBindings = self.loadSchema(schema, tuple)
+        hashValue = eval(hashFn, globals(), fieldBindings)
+
+        # Store in temporary buckets (files)
+        if not hashValue in relIdMap:
+          relId = str(self.id()) + "_" + relPrefix + "_" + str(hashValue)
+          self.storage.createRelation(relId, schema)
+          relIdMap[hashValue] = relId
+
+        self.storage.insertTuple(relIdMap[hashValue], tuple)          
 
   # Plan and statistics information
 
