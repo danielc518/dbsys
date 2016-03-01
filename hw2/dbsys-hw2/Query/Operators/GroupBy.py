@@ -1,6 +1,9 @@
 from Catalog.Schema import DBSchema
 from Query.Operator import Operator
 
+import itertools
+import types
+
 class GroupBy(Operator):
   def __init__(self, subPlan, **kwargs):
     super().__init__(**kwargs)
@@ -59,10 +62,12 @@ class GroupBy(Operator):
 
   # Iterator abstraction for selection operator.
   def __iter__(self):
-    raise NotImplementedError
+    self.initializeOutput()
+    self.outputIterator = self.processAllPages()
+    return self
 
   def __next__(self):
-    raise NotImplementedError
+    return next(self.outputIterator)
 
   # Page-at-a-time operator processing
   def processInputPage(self, pageId, page):
@@ -70,7 +75,80 @@ class GroupBy(Operator):
 
   # Set-at-a-time operator processing
   def processAllPages(self):
-    raise NotImplementedError
+    relIdMap = {}
+
+    # Perform partition using hash function
+    self.partition(relIdMap)
+
+    # Perform group-by operation
+    for hashValue, relId in relIdMap.items():
+      pageIter = self.storage.pages(relId)
+
+      aggregationResults = {} # Stores intermediate aggregation results
+
+      for _, page in pageIter:
+        for tupleP in page:
+          tupleU = self.subSchema.unpack(tupleP)
+          gbVal = self.getGroupByValue(tupleU)
+
+          # Get intermediate results for this group-by value
+          intermediateResults = aggregationResults.get(gbVal, None)
+
+          if intermediateResults is None:
+            intermediateResults = list()
+            aggregationResults[gbVal] = intermediateResults
+            for aggExpr in self.aggExprs:
+              # Form a list of initial values
+              intermediateResults.append(aggExpr[0])
+          
+          idx = 0
+          for aggExpr in self.aggExprs:
+            # Perform aggregation by applying the lambda function (aggExpr[1])
+            intermediateResult = intermediateResults[idx]
+            intermediateResults[idx] = aggExpr[1](intermediateResult, tupleU)
+            idx = idx + 1
+
+      for gbVal, intermediateResults in aggregationResults.items():
+        idx = 0
+        for aggExpr in self.aggExprs:
+          # Perform final step by applying the lambda function (aggExpr[2])
+          intermediateResult = intermediateResults[idx]
+          intermediateResults[idx] = aggExpr[2](intermediateResult)
+          idx = idx + 1
+
+        outputList = itertools.chain([gbVal[0]], intermediateResults)
+        outputTuple = self.outputSchema.instantiate(*outputList)
+        self.emitOutputTuple(self.outputSchema.pack(outputTuple))
+
+      # No need to track anything but the last output page when in batch mode.
+      if self.outputPages:
+        self.outputPages = [self.outputPages[-1]]
+
+    # Remove partitions
+    for _, relId in relIdMap.items():
+      self.storage.removeRelation(relId)
+
+    return self.storage.pages(self.relationId())
+
+  # Partitions a given relation based on some hash function 
+  def partition(self, relIdMap):
+    for (pageId, page) in iter(self.subPlan):
+      for tupleP in page:
+        # Compute hash value for every tuple
+        tupleU = self.subSchema.unpack(tupleP)
+        hashVal = self.groupHashFn(self.getGroupByValue(tupleU))
+
+        # Store in temporary buckets (files)
+        if not hashVal in relIdMap:
+          relId = str(self.id()) + "_grp_" + str(hashVal)
+          self.storage.createRelation(relId, self.subSchema)
+          relIdMap[hashVal] = relId
+
+        self.storage.insertTuple(relIdMap[hashVal], tupleP)
+
+  def getGroupByValue(self, unpackedTuple):
+    gbVal = self.groupExpr(unpackedTuple)
+    return gbVal if type(gbVal) is tuple else gbVal,
 
   # Plan and statistics information
 
