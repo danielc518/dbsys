@@ -1,0 +1,1 @@
+For the experiments, we could not get a result for query #3 because it simply took way too long.
