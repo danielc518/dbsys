@@ -59,7 +59,117 @@ class Optimizer:
   # This does not need to cascade operators, but should determine a
   # suitable ordering for selection predicates based on the cost model below.
   def pushdownOperators(self, plan):
-    raise NotImplementedError
+    newRoot = self.pushdownOperator(plan.root)
+    return Plan(root=newRoot)
+
+  def pushdownOperator(self, op):
+    opType = op.operatorType()
+
+    # PROJECT pushdown
+    if opType == "Project":
+      op.subPlan = self.pushdownOperator(op.subPlan)
+
+      subPlanType = op.subPlan.operatorType()
+
+      if subPlanType == "Select":
+        selections = ExpressionInfo(op.subPlan.selectExpr).getAttributes()
+
+        for selection in selections:
+          if selection not in op.projectExprs.keys():
+            return op # Cannot push-down
+
+        op.subPlan = op.subPlan.subPlan
+        op.subPlan.subPlan = self.pushdownOperator(op)
+      elif subPlanType.endswith("Join"):
+        lFields = op.subPlan.lhsPlan.schema().fields
+        rFields = op.subPlan.rhsPlan.schema().fields
+
+        lProjectExprs = dict()
+        rProjectExprs = dict()
+
+        for (attr, (expr, _)) in op.projectExprs.items():
+          projections = ExpressionInfo(expr).getAttributes()
+
+          if self.contains(lFields, projections):
+            lProjectExprs[attr] = op.projectExprs[attr]
+            continue
+          if self.contains(rFields, projections):
+            rProjectExprs[attr] = op.projectExprs[attr]
+
+        if lProjectExprs:
+          op.subPlan.lhsPlan = self.pushdownOperator(Project(op.subPlan.lhsPlan, lProjectExprs))
+        if rProjectExprs:
+          op.subPlan.rhsPlan = self.pushdownOperator(Project(op.subPlan.rhsPlan, rProjectExprs))
+
+        if len(op.projectExprs) != (len(lProjectExprs) + len(rProjectExprs)):
+          return op # Cannot push-down completely
+      elif subPlanType == "UnionAll":
+        op.subPlan.lhsPlan = self.pushdownOperator(Project(op.subPlan.lhsPlan, op.projectExprs))
+        op.subPlan.rhsPlan = self.pushdownOperator(Project(op.subPlan.rhsPlan, op.projectExprs))
+      else:
+        return op # Cannot push-down
+
+      return op.subPlan # Return pushed-down plan
+
+    # SELECT pushdown
+    elif opType == "Select":
+      op.subPlan = self.pushdownOperator(op.subPlan)
+
+      subPlanType = op.subPlan.operatorType()
+
+      if subPlanType == "Sort":
+        op.subPlan = op.subPlan.subPlan
+        op.subPlan.subPlan = self.pushdownOperator(op)
+      elif subPlanType.endswith("Join"):
+        lFields = op.subPlan.lhsPlan.schema().fields
+        rFields = op.subPlan.rhsPlan.schema().fields
+
+        lSelectExprs  = list()
+        rSelectExprs  = list()
+        unPushedExprs = list()
+
+        # All 'Select' expressions are in Conjunctive Normal Form 
+        selectExprs = ExpressionInfo(op.selectExpr).decomposeCNF()
+
+        for selectExpr in selectExprs:
+          selections = ExpressionInfo(selectExpr).getAttributes()
+          if self.contains(lFields, selections):
+            lSelectExprs.append(selectExpr)
+          elif self.contains(rFields, selections):
+            rSelectExprs.append(selectExpr)
+          else:
+            unPushedExprs.append(selectExpr)
+
+        if lSelectExprs:
+          op.subPlan.lhsPlan = self.pushdownOperator(Select(op.subPlan.lhsPlan, ' and '.join(lSelectExprs)))
+        if rSelectExprs:
+          op.subPlan.rhsPlan = self.pushdownOperator(Select(op.subPlan.rhsPlan, ' and '.join(rSelectExprs)))
+        if unPushedExprs:
+          return Select(op.subPlan, ' and '.join(unPushedExprs))
+      elif subPlanType == "UnionAll":
+        op.subPlan.lhsPlan = self.pushdownOperator(Select(op.subPlan.lhsPlan, op.selectExpr))
+        op.subPlan.rhsPlan = self.pushdownOperator(Select(op.subPlan.rhsPlan, op.selectExpr))
+      else:
+        return op
+
+      return op.subPlan # Return pushed-down plan
+    elif opType == "GroupBy" or opType == "Sort":
+      op.subPlan = self.pushdownOperator(op.subPlan)
+      return op
+    elif opType == "UnionAll" or opType.endswith("Join"):
+      op.lhsPlan = self.pushdownOperator(op.lhsPlan)
+      op.rhsPlan = self.pushdownOperator(op.rhsPlan)
+      return op
+    else:
+      # Push down not supported.
+      return op
+
+  # Checks whether 'lhs' contains 'rhs'
+  def contains(self, lhs, rhs):
+    for r in rhs:
+      if r not in lhs:
+        return False
+    return True
 
   # Returns an optimized query plan with joins ordered via a System-R style
   # dyanmic programming algorithm. The plan cost should be compared with the
@@ -71,7 +181,7 @@ class Optimizer:
   # This should perform operation pushdown, followed by join order selection.
   def optimizeQuery(self, plan):
     pushedDown_plan = self.pushdownOperators(plan)
-    joinPicked_plan = self.pickJoinOrder(joinPicked_plan)
+    joinPicked_plan = self.pickJoinOrder(pushedDown_plan)
 
     return joinPicked_plan
 
