@@ -165,3 +165,11 @@ class GroupBy(Operator):
   def explain(self):
     return super().explain() + "(groupSchema=" + self.groupSchema.toString() \
                              + ", aggSchema=" + self.aggSchema.toString() + ")"
+
+  def localCost(self, estimated):
+    tuplesPerPage = self.storage.bufferPool.pageSize / self.subPlan.schema().size
+
+    numPages = self.subPlan.cardinality(estimated) / tuplesPerPage
+
+    # 1 for building hash and 1 for reading
+    return 2 * numPages

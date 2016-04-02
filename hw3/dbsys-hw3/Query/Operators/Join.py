@@ -362,6 +362,34 @@ class Join(Operator):
 
     return super().explain() + exprs
 
+  def localCost(self, estimated):
+    lTuplesPerPage = self.storage.bufferPool.pageSize / self.lhsPlan.schema().size
+    rTuplesPerPage = self.storage.bufferPool.pageSize / self.rhsPlan.schema().size
+
+    lNumTuples = self.lhsPlan.cardinality(estimated)
+    rNumTuples = self.rhsPlan.cardinality(estimated)
+
+    lNumPages = lNumTuples / lTuplesPerPage
+    rNumPages = rNumTuples / rTuplesPerPage
+
+    if self.joinMethod == "nested-loops":
+      return lNumPages + (lNumTuples * rNumPages)
+
+    elif self.joinMethod == "block-nested-loops":
+      numBufferPages = self.storage.bufferPool.numPages()
+      return lNumPages + (lNumPages * rNumPages/ (numBufferPages - 2))
+
+    elif self.joinMethod == "indexed":
+      # Index access cost and data fetch cost is hard to determine
+      # Resort to conservative cost estimation (0.75 is arbitrary)
+      return lNumPages + (lNumTuples * 0.75 * rNumPages)
+
+    elif self.joinMethod == "hash":
+      return 3 * (lNumPages + rNumPages)
+
+    else:
+      raise ValueError("Invalid join method in join operator")
+
 # An iterator class for looping over pairs of pages from partition files.
 class PartitionIterator:
   def __init__(self, partFiles, storageEngine):
