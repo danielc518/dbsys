@@ -176,23 +176,36 @@ class Optimizer:
   # dyanmic programming algorithm. The plan cost should be compared with the
   # use of the cost model below.
   def pickJoinOrder(self, plan):
+    # Some restrictions apply:
+    # 1. Cannot involve hash-joins or index-joins
+    # 2. Only join operations beyond certain point (i.e. cannot have join -> aggregation -> join, etc.)
+
     tableIds = list()
     joinOps  = list()
     optPlans = dict()
+    fields   = dict()
+
+    firstOpWithJoins = None
 
     for (_,op) in plan.flatten():
+      if firstOpWithJoins is None and isinstance(op.subPlan, Join):
+        firstOpWithJoins = op
+
       if isinstance(op, Project):
         if isinstance(op.subPlan, TableScan):
-          tableIds.append(op.subPlan.relationId())
-          optPlans[op.subPlan.relationId()] = op
+          tableIds.append(op.subPlan.id())
+          optPlans[str(op.subPlan.id())] = op
+          fields[op.subPlan.id()] = op.subPlan.schema().fields
       elif isinstance(op, Select):
         if isinstance(op.subPlan, TableScan):
-          tableIds.append(op.subPlan.relationId())
-          optPlans[op.subPlan.relationId()] = op
+          tableIds.append(op.subPlan.id())
+          optPlans[str(op.subPlan.id())] = op
+          fields[op.subPlan.id()] = op.subPlan.schema().fields
       elif isinstance(op, TableScan):
-        if op.relationId() not in optPlans:
-          tableIds.append(op.relationId())
-          optPlans[op.relationId()] = op
+        if str(op.id()) not in optPlans:
+          tableIds.append(op.id())
+          optPlans[str(op.id())] = op
+          fields[op.id()] = op.schema().fields
       elif isinstance(op, Join):
         joinOps.append(op)
       else:
@@ -206,21 +219,23 @@ class Optimizer:
         optPlan = None
         for tableId in possibleJoinOrder:
           # Left-deep-only optimizer (i.e. rhs operand is a base relation)
-          lhs = list(possibleJoinOrder)
-          lhs.remove(tableId)
+          lhsIds = list(possibleJoinOrder)
+          lhsIds.remove(tableId)
 
-          lhsOpt = optPlans[self.getJoinKey(lhs)]
-          rhsOpt = optPlans[tableId]
+          lhsOpt = optPlans[self.getJoinKey(lhsIds)]
+          rhsOpt = optPlans[str(tableId)]
 
           currJoinExpr = None
 
           for join in joinOps:
-            # Assume initial joins are strictly between two relations            
-            if join.joinExpr and join.lhsPlan.relationId() in lhs and join.rhsPlan.relationId() == tableId:
+            lFields = list()
+            for lhsId in lhsIds:
+              lFields.extend(fields[lhsId])      
+            if join.joinExpr and join.lhsPlan.schema().fields in lFields and join.rhsPlan.schema().fields in fields[tableId]:
               currJoinExpr = join.joinExpr
               break
 
-          if currJoinExpr is None:
+          if currJoinExpr is None: # either there was a hash-join or index-join
             return plan # cannot perform re-ordering
 
           for joinMethod in ["nested-loops", "block-nested-loops"]:
@@ -238,13 +253,14 @@ class Optimizer:
 
       numTables = numTables + 1
 
-    optPlan = Plan(root=optPlans[self.getJoinKey(tableIds)])
-    optPlan.prepare(self.db)
+    firstOpWithJoins.subPlan = optPlans[self.getJoinKey(tableIds)]
 
-    return optPlan
+    plan.prepare(self.db)
+
+    return plan
 
   def getJoinKey(self, tableIds):
-    return ','.join(tableIds)
+    return ','.join(str(x) for x in tableIds)
 
   # Optimize the given query plan, returning the resulting improved plan.
   # This should perform operation pushdown, followed by join order selection.
