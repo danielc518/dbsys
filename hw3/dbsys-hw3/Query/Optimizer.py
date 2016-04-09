@@ -46,6 +46,7 @@ class Optimizer:
   def __init__(self, db):
     self.db = db
     self.statsCache = {}
+    self.numPlansConsidered = 0
 
   # Caches the cost of a plan computed during query optimization.
   def addPlanCost(self, plan, cost):

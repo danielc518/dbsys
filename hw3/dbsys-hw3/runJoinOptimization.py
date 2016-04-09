@@ -189,36 +189,42 @@ elif optimizerName == "Greedy":
 else:
   pass
 
-print("Testing " + optimizerName + " Optimizer...\n\n")
+print("Testing " + optimizerName + " Optimizer...\n")
 
 start = time()
-db.optimizer.pickJoinOrder(query2);
+db.optimizer.pickJoinOrder(query2)
 end = time()
+print("Number of plans considered: " + str(db.optimizer.numPlansConsidered))
 print("Time to join 2 plans: " + str(end - start) + "\n")
 
 start = time()
-db.optimizer.pickJoinOrder(query4);
+db.optimizer.pickJoinOrder(query4)
 end = time()
+print("Number of plans considered: " + str(db.optimizer.numPlansConsidered))
 print("Time to join 4 plans: " + str(end - start) + "\n")
 
 start = time()
-db.optimizer.pickJoinOrder(query6);
+db.optimizer.pickJoinOrder(query6)
 end = time()
+print("Number of plans considered: " + str(db.optimizer.numPlansConsidered))
 print("Time to join 6 plans: " + str(end - start) + "\n")
 
 start = time()
-db.optimizer.pickJoinOrder(query8);
+db.optimizer.pickJoinOrder(query8)
 end = time()
+print("Number of plans considered: " + str(db.optimizer.numPlansConsidered))
 print("Time to join 8 plans: " + str(end - start) + "\n")
 
 start = time()
-db.optimizer.pickJoinOrder(query10);
+db.optimizer.pickJoinOrder(query10)
 end = time()
+print("Number of plans considered: " + str(db.optimizer.numPlansConsidered))
 print("Time to join 10 plans: " + str(end - start) + "\n")
 
 start = time()
-db.optimizer.pickJoinOrder(query12);
+db.optimizer.pickJoinOrder(query12)
 end = time()
+print("Number of plans considered: " + str(db.optimizer.numPlansConsidered))
 print("Time to join 12 plans: " + str(end - start) + "\n")
 
 # Clean-up relations
