@@ -202,35 +202,50 @@ class Optimizer:
           lhsIds = list(possibleJoinOrder)
           lhsIds.remove(tableId)
 
-          lhsOpt = optPlans[self.getJoinKey(lhsIds)]
-          rhsOpt = optPlans[str(tableId)]
+          lhsJoinKey = self.getJoinKey(lhsIds)
+          rhsJoinKey = str(tableId)
 
-          lFields = list()
+          lhsOpt = optPlans[lhsJoinKey] if lhsJoinKey in optPlans else None
+          rhsOpt = optPlans[rhsJoinKey] if rhsJoinKey in optPlans else None
+
+          if lhsOpt is None or rhsOpt is None:
+            continue # Skip irrelevant joins
+
+          # Form a list of available attributes of this join
+          allAttrs = list()
           for lhsId in lhsIds:
-            lFields.extend(fields[lhsId])
+            allAttrs.extend(fields[lhsId])
+
+          allAttrs.extend(fields[tableId])
 
           currJoinExpr = None
 
+          # Check whether any join expression can be satisfied with this join
           for join in joinOps:      
-            if join.joinExpr and self.contains(lFields, join.lhsPlan.schema().fields) and join.rhsPlan.schema().fields in fields[tableId]:
-              currJoinExpr = join.joinExpr
-              break
+            if join.joinExpr:
+              joinAttrs = ExpressionInfo(join.joinExpr).getAttributes()
+              if self.contains(allAttrs, joinAttrs):
+                currJoinExpr = join.joinExpr
+                break
+            else:
+              # Should not involve hash-joins or index-joins (limitation)
+              return plan
 
-          if currJoinExpr is None: # either there was a hash-join or index-join
-            return plan # cannot perform re-ordering
+          if currJoinExpr is None:
+            continue # Irrelevant join
 
           for joinMethod in ["nested-loops", "block-nested-loops"]:
             possiblePlan = Plan(root=Join(lhsPlan=lhsOpt, rhsPlan=rhsOpt, method=joinMethod, expr=currJoinExpr))
 
             possiblePlan.prepare(self.db)
-            possiblePlan.sample(1.0)
+            # possiblePlan.sample(1.0) # Sampling causes too much overhead!
             cost = possiblePlan.cost(estimated=True)
 
             if minCost is None or cost < minCost:
               minCost = cost
               optPlan = possiblePlan
 
-        optPlans[self.getJoinKey(possibleJoinOrder)] = optPlan.root
+        optPlans[self.getJoinKey(possibleJoinOrder)] = None if optPlan is None else optPlan.root 
 
       numTables = numTables + 1
 
