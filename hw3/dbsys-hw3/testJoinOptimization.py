@@ -8,22 +8,37 @@ from Query.GreedyOptimizer import GreedyOptimizer
 from Catalog.Schema import DBSchema
 from time import time
 
+def cleanup(db):
+  if db.hasRelation('A'):
+    db.removeRelation('A')
+  if db.hasRelation('B'):
+    db.removeRelation('B')
+  if db.hasRelation('C'):
+    db.removeRelation('C')
+  if db.hasRelation('D'):
+    db.removeRelation('D')
+  if db.hasRelation('E'):
+    db.removeRelation('E')
+  if db.hasRelation('F'):
+    db.removeRelation('F')
+  if db.hasRelation('G'):
+    db.removeRelation('G')
+  if db.hasRelation('H'):
+    db.removeRelation('H')
+  if db.hasRelation('I'):
+    db.removeRelation('I')
+  if db.hasRelation('J'):
+    db.removeRelation('J')
+  if db.hasRelation('K'):
+    db.removeRelation('K')
+  if db.hasRelation('L'):
+    db.removeRelation('L')
+
 # Create synthetic database schema, consisting of relations with triples of integers
 
 db = Database.Database()
 
-db.removeRelation('A');
-db.removeRelation('B');
-db.removeRelation('C');
-db.removeRelation('D');
-db.removeRelation('E');
-db.removeRelation('F');
-db.removeRelation('G');
-db.removeRelation('H');
-db.removeRelation('I');
-db.removeRelation('J');
-db.removeRelation('K');
-db.removeRelation('L');
+cleanup(db)
 
 db.createRelation('A', [('a_a', 'int'), ('a_b', 'int'), ('a_c', 'int')])
 db.createRelation('B', [('b_a', 'int'), ('b_b', 'int'), ('b_c', 'int')])
@@ -208,17 +223,6 @@ print("Time to join 12 plans: " + str(end - start) + "\n")
 
 # Clean-up relations
 
-db.removeRelation('A');
-db.removeRelation('B');
-db.removeRelation('C');
-db.removeRelation('D');
-db.removeRelation('E');
-db.removeRelation('F');
-db.removeRelation('G');
-db.removeRelation('H');
-db.removeRelation('I');
-db.removeRelation('J');
-db.removeRelation('K');
-db.removeRelation('L');
+cleanup(db)
 
-db.close();
+db.close()
