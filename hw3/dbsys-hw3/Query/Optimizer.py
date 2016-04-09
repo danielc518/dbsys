@@ -186,6 +186,9 @@ class Optimizer:
     fields   = dict()
 
     firstOpWithJoins = self.extractJoinInfo(plan, tableIds, joinOps, optPlans, fields)
+
+    if len(joinOps) == 0:
+      return plan
     
     numTables = 2
     while numTables <= len(tableIds):
