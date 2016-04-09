@@ -185,31 +185,7 @@ class Optimizer:
     optPlans = dict()
     fields   = dict()
 
-    firstOpWithJoins = None
-
-    for (_,op) in plan.flatten():
-      if firstOpWithJoins is None and isinstance(op.subPlan, Join):
-        firstOpWithJoins = op
-
-      if isinstance(op, Project):
-        if isinstance(op.subPlan, TableScan):
-          tableIds.append(op.subPlan.id())
-          optPlans[str(op.subPlan.id())] = op
-          fields[op.subPlan.id()] = op.subPlan.schema().fields
-      elif isinstance(op, Select):
-        if isinstance(op.subPlan, TableScan):
-          tableIds.append(op.subPlan.id())
-          optPlans[str(op.subPlan.id())] = op
-          fields[op.subPlan.id()] = op.subPlan.schema().fields
-      elif isinstance(op, TableScan):
-        if str(op.id()) not in optPlans:
-          tableIds.append(op.id())
-          optPlans[str(op.id())] = op
-          fields[op.id()] = op.schema().fields
-      elif isinstance(op, Join):
-        joinOps.append(op)
-      else:
-        continue
+    firstOpWithJoins = self.extractJoinInfo(plan, tableIds, joinOps, optPlans, fields)
     
     numTables = 2
     while numTables <= len(tableIds):
@@ -225,13 +201,14 @@ class Optimizer:
           lhsOpt = optPlans[self.getJoinKey(lhsIds)]
           rhsOpt = optPlans[str(tableId)]
 
+          lFields = list()
+          for lhsId in lhsIds:
+            lFields.extend(fields[lhsId])
+
           currJoinExpr = None
 
-          for join in joinOps:
-            lFields = list()
-            for lhsId in lhsIds:
-              lFields.extend(fields[lhsId])      
-            if join.joinExpr and join.lhsPlan.schema().fields in lFields and join.rhsPlan.schema().fields in fields[tableId]:
+          for join in joinOps:      
+            if join.joinExpr and self.contains(lFields, join.lhsPlan.schema().fields) and join.rhsPlan.schema().fields in fields[tableId]:
               currJoinExpr = join.joinExpr
               break
 
@@ -259,6 +236,37 @@ class Optimizer:
 
     return plan
 
+  # Extracts relations, join operators, and fields involved in the given plan
+  def extractJoinInfo(self, plan, tableIds, joinOps, optPlans, fields):
+    firstOpWithJoins = None
+
+    for (_,op) in plan.flatten():
+      if firstOpWithJoins is None and not isinstance(op, Join) and not isinstance(op, TableScan) and isinstance(op.subPlan, Join):
+        firstOpWithJoins = op
+
+      if isinstance(op, Project):
+        if isinstance(op.subPlan, TableScan):
+          tableIds.append(op.subPlan.id())
+          optPlans[str(op.subPlan.id())] = op
+          fields[op.subPlan.id()] = op.subPlan.schema().fields
+      elif isinstance(op, Select):
+        if isinstance(op.subPlan, TableScan):
+          tableIds.append(op.subPlan.id())
+          optPlans[str(op.subPlan.id())] = op
+          fields[op.subPlan.id()] = op.subPlan.schema().fields
+      elif isinstance(op, TableScan):
+        if str(op.id()) not in optPlans:
+          tableIds.append(op.id())
+          optPlans[str(op.id())] = op
+          fields[op.id()] = op.schema().fields
+      elif isinstance(op, Join):
+        joinOps.append(op)
+      else:
+        continue
+
+    return firstOpWithJoins
+
+  # Return a string key of table ids for use in dictionary 
   def getJoinKey(self, tableIds):
     return ','.join(str(x) for x in tableIds)
 
