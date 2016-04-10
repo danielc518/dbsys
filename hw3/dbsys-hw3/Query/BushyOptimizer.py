@@ -69,11 +69,23 @@ class BushyOptimizer(Optimizer):
             if currJoinExpr is None:
               continue # Skip irrelevant joins
 
-            self.numPlansConsidered += 1
+            self.numPlansConsidered += 2
             
             # Compare costs of different type of joins 
             for joinMethod in ["nested-loops", "block-nested-loops"]:
               possiblePlan = Plan(root=Join(lhsPlan=lhsOpt, rhsPlan=rhsOpt, method=joinMethod, expr=currJoinExpr))
+
+              possiblePlan.prepare(self.db)
+              # possiblePlan.sample(1.0) # Sampling causes too much overhead!
+              cost = possiblePlan.cost(estimated=True)
+
+              if minCost is None or cost < minCost:
+                minCost = cost
+                optPlan = possiblePlan
+
+            # Switch left and right and compare again
+            for joinMethod in ["nested-loops", "block-nested-loops"]:
+              possiblePlan = Plan(root=Join(lhsPlan=rhsOpt, rhsPlan=lhsOpt, method=joinMethod, expr=currJoinExpr))
 
               possiblePlan.prepare(self.db)
               # possiblePlan.sample(1.0) # Sampling causes too much overhead!
