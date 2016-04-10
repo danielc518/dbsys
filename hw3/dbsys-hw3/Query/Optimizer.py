@@ -50,11 +50,11 @@ class Optimizer:
 
   # Caches the cost of a plan computed during query optimization.
   def addPlanCost(self, plan, cost):
-    raise NotImplementedError
+    self.statsCache[plan] = cost
 
   # Checks if we have already computed the cost of this plan.
   def getPlanCost(self, plan):
-    raise NotImplementedError
+    return self.statsCache[plan] if plan in self.statsCache else None
 
   # Given a plan, return an optimized plan with both selection and
   # projection operations pushed down to their nearest defining relation
