@@ -77,7 +77,9 @@ class GreedyOptimizer(Optimizer):
 
           possiblePlan.prepare(self.db)
           # possiblePlan.sample(1.0) # Sampling causes too much overhead!
-          cost = possiblePlan.cost(estimated=True)
+          cost = self.getPlanCost(plan)
+          cost = possiblePlan.cost(estimated=True) if cost is None else cost
+          self.addPlanCost(plan, cost)
 
           if minCost is None or cost < minCost:
             minCost  = cost
@@ -91,7 +93,9 @@ class GreedyOptimizer(Optimizer):
 
           possiblePlan.prepare(self.db)
           # possiblePlan.sample(1.0) # Sampling causes too much overhead!
-          cost = possiblePlan.cost(estimated=True)
+          cost = self.getPlanCost(plan)
+          cost = possiblePlan.cost(estimated=True) if cost is None else cost
+          self.addPlanCost(plan, cost)
 
           if minCost is None or cost < minCost:
             minCost  = cost

@@ -50,11 +50,17 @@ class Optimizer:
 
   # Caches the cost of a plan computed during query optimization.
   def addPlanCost(self, plan, cost):
-    self.statsCache[plan] = cost
+    planKey = self.getPlanKey(plan)
+    self.statsCache[planKey] = cost
 
   # Checks if we have already computed the cost of this plan.
   def getPlanCost(self, plan):
-    return self.statsCache[plan] if plan in self.statsCache else None
+    planKey = self.getPlanKey(plan)
+    return self.statsCache[planKey] if planKey in self.statsCache else None
+
+  def getPlanKey(self, plan):
+    joinOp = plan.root
+    return (joinOp.lhsPlan, joinOp.rhsPlan, joinOp.joinMethod, joinOp.joinExpr)
 
   # Given a plan, return an optimized plan with both selection and
   # projection operations pushed down to their nearest defining relation
@@ -239,7 +245,9 @@ class Optimizer:
 
             possiblePlan.prepare(self.db)
             # possiblePlan.sample(1.0) # Sampling causes too much overhead!
-            cost = possiblePlan.cost(estimated=True)
+            cost = self.getPlanCost(plan)
+            cost = possiblePlan.cost(estimated=True) if cost is None else cost
+            self.addPlanCost(plan, cost)
 
             if minCost is None or cost < minCost:
               minCost = cost
