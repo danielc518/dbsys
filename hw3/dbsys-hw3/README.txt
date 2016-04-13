@@ -3,7 +3,8 @@ EXPERIMENT RESULTS
 Exercise #4:
 
 As evident from the results below, greedy optimization yields much better performance than bushy optimization.
-Sampling feature has been turned off since it consumed too much time.
+
+RESULTS WITH NO SAMPLING (sampling consumed too much time): 
 
 ***** Bushy Optimizer *****
 
@@ -44,6 +45,28 @@ Time to join 10 plans: 0.18964147567749023
 
 Number of plans considered: 132
 Time to join 12 plans: 0.2771165370941162
+
+
+RESULTS WITH SAMPLING (only limited set of results due to long running time):
+
+***** Bushy Optimizer *****
+
+Number of plans considered: 4
+Time to join 2 plans: 0.7834987640380859
+
+Number of plans considered: 16
+Time to join 4 plans: 58.114935636520386
+
+Number of plans considered: 28
+Time to join 6 plans: 72.34911513328552
+
+***** Greedy Optimizer *****
+
+Number of plans considered: 2
+Time to join 2 plans: 0.47540950775146484
+
+Number of plans considered: 12
+Time to join 4 plans: 8.497896432876587
 
 
 Exercise #5:

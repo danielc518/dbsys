@@ -76,7 +76,7 @@ class GreedyOptimizer(Optimizer):
           possiblePlan = Plan(root=Join(lhsPlan=lhsOpt, rhsPlan=rhsOpt, method=joinMethod, expr=currJoinExpr))
 
           possiblePlan.prepare(self.db)
-          # possiblePlan.sample(1.0) # Sampling causes too much overhead!
+          possiblePlan.sample(1.0) # Sampling causes too much overhead!
           cost = self.getPlanCost(plan)
           cost = possiblePlan.cost(estimated=True) if cost is None else cost
           self.addPlanCost(plan, cost)
@@ -92,7 +92,7 @@ class GreedyOptimizer(Optimizer):
           possiblePlan = Plan(root=Join(lhsPlan=rhsOpt, rhsPlan=lhsOpt, method=joinMethod, expr=currJoinExpr))
 
           possiblePlan.prepare(self.db)
-          # possiblePlan.sample(1.0) # Sampling causes too much overhead!
+          possiblePlan.sample(1.0) # Sampling causes too much overhead!
           cost = self.getPlanCost(plan)
           cost = possiblePlan.cost(estimated=True) if cost is None else cost
           self.addPlanCost(plan, cost)
