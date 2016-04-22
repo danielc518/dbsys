@@ -9,9 +9,9 @@ create materialized view lineitem_cust_order enable query rewrite as select * fr
 /*+ rewrite(lineitem_cust_order) */
 
 Q5.
-create materialized view l_c_o_s_n_r enable query rewrite as select * from lineitem, customer, orders, supplier, nation, region where c_custkey = o_custkey and l_orderkey = o_orderkey and l_suppkey = s_suppkey and c_nationkey = s_nationkey and s_nationkey = n_nationkey and n_regionkey = r_regionkey;
+create materialized view full_join enable query rewrite as select * from lineitem, customer, orders, supplier, nation, region where c_custkey = o_custkey and l_orderkey = o_orderkey and l_suppkey = s_suppkey and c_nationkey = s_nationkey and s_nationkey = n_nationkey and n_regionkey = r_regionkey;
 
-/*+ rewrite(l_c_o_s_n_r) */
+/*+ rewrite(full_join) */
 
 Q6.
 create materialized view lineitem_ship_disc_quant enable query rewrite as select * from lineitem where l_shipdate >= date '1994-01-01' and l_shipdate < date '1995-01-01' and l_discount between 0.06 - 0.01 and 0.06 + 0.01 and l_quantity < 24;
@@ -26,10 +26,8 @@ create materialized view lineitem_orderkey enable query rewrite as select l_orde
 
 Q22.
 create materialized view customer_order enable query rewrite as select * from customer, orders where o_custkey = c_custkey;
-
-/*+ rewrite(customer_order) */
-
 create materialized view subquery enable query rewrite as   SELECT    substr(c_phone, 1, 2) AS cntrycode,    c_acctbal   FROM customer   WHERE substr(c_phone, 1, 2) IN ('13', '31', '23', '29', '30', '18', '17')    AND c_acctbal > (     SELECT avg(c_acctbal)     FROM customer     WHERE c_acctbal > 0.00      AND substr(c_phone, 1, 2) IN ('13', '31', '23', '29', '30', '18', '17')    )    AND NOT EXISTS (     SELECT *     FROM orders     WHERE o_custkey = c_custkey    );
 
+/*+ rewrite(customer_order) */
 /*+ rewrite(subquery) */
 

@@ -1,4 +1,4 @@
-Elapsed: 00:00:01.10
+Elapsed: 00:00:01.11
 
 Execution Plan
 ----------------------------------------------------------
@@ -9,7 +9,7 @@ Plan hash value: 2287326370
 -------------------------------------------------------------------------------
 |   0 | SELECT STATEMENT   |          |     1 |    16 | 29525   (1)| 00:00:02 |
 |   1 |  SORT AGGREGATE    |          |     1 |    16 |            |          |
-|*  2 |   TABLE ACCESS FULL| LINEITEM |   155K|  2435K| 29525   (1)| 00:00:02 |
+|*  2 |   TABLE ACCESS FULL| LINEITEM |   124K|  1948K| 29525   (1)| 00:00:02 |
 -------------------------------------------------------------------------------
 
 Predicate Information (identified by operation id):
@@ -22,46 +22,10 @@ Predicate Information (identified by operation id):
 
               AND "L_DISCOUNT"<=.07)
 
-
-Statistics
-----------------------------------------------------------
-          1  recursive calls
-          0  db block gets
-     108570  consistent gets
-          0  physical reads
-        124  redo size
-        547  bytes sent via SQL*Net to client
-        551  bytes received via SQL*Net from client
-          2  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-          1  rows processed
-
-
-
-Elapsed: 00:00:00.96
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 2287326370
-
--------------------------------------------------------------------------------
-| Id  | Operation          | Name     | Rows  | Bytes | Cost (%CPU)| Time     |
--------------------------------------------------------------------------------
-|   0 | SELECT STATEMENT   |          |     1 |    16 | 29525   (1)| 00:00:02 |
-|   1 |  SORT AGGREGATE    |          |     1 |    16 |            |          |
-|*  2 |   TABLE ACCESS FULL| LINEITEM |   155K|  2435K| 29525   (1)| 00:00:02 |
--------------------------------------------------------------------------------
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   2 - filter("L_SHIPDATE"<TO_DATE(' 1995-01-01 00:00:00', 'syyyy-mm-dd
-              hh24:mi:ss') AND "L_QUANTITY"<24 AND "L_DISCOUNT">=.05 AND
-              "L_SHIPDATE">=TO_DATE(' 1994-01-01 00:00:00', 'syyyy-mm-dd hh24:mi
-:ss')
-
-              AND "L_DISCOUNT"<=.07)
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
 
 
 Statistics
@@ -72,48 +36,7 @@ Statistics
           0  physical reads
         124  redo size
         547  bytes sent via SQL*Net to client
-        551  bytes received via SQL*Net from client
-          2  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-          1  rows processed
-
-
-
-Elapsed: 00:00:00.98
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 2287326370
-
--------------------------------------------------------------------------------
-| Id  | Operation          | Name     | Rows  | Bytes | Cost (%CPU)| Time     |
--------------------------------------------------------------------------------
-|   0 | SELECT STATEMENT   |          |     1 |    16 | 29525   (1)| 00:00:02 |
-|   1 |  SORT AGGREGATE    |          |     1 |    16 |            |          |
-|*  2 |   TABLE ACCESS FULL| LINEITEM |   155K|  2435K| 29525   (1)| 00:00:02 |
--------------------------------------------------------------------------------
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   2 - filter("L_SHIPDATE"<TO_DATE(' 1995-01-01 00:00:00', 'syyyy-mm-dd
-              hh24:mi:ss') AND "L_QUANTITY"<24 AND "L_DISCOUNT">=.05 AND
-              "L_SHIPDATE">=TO_DATE(' 1994-01-01 00:00:00', 'syyyy-mm-dd hh24:mi
-:ss')
-
-              AND "L_DISCOUNT"<=.07)
-
-
-Statistics
-----------------------------------------------------------
-          0  recursive calls
-          0  db block gets
-     108570  consistent gets
-          0  physical reads
-        124  redo size
-        547  bytes sent via SQL*Net to client
-        551  bytes received via SQL*Net from client
+        552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client
           0  sorts (memory)
           0  sorts (disk)
@@ -132,7 +55,7 @@ Plan hash value: 2287326370
 -------------------------------------------------------------------------------
 |   0 | SELECT STATEMENT   |          |     1 |    16 | 29525   (1)| 00:00:02 |
 |   1 |  SORT AGGREGATE    |          |     1 |    16 |            |          |
-|*  2 |   TABLE ACCESS FULL| LINEITEM |   155K|  2435K| 29525   (1)| 00:00:02 |
+|*  2 |   TABLE ACCESS FULL| LINEITEM |   124K|  1948K| 29525   (1)| 00:00:02 |
 -------------------------------------------------------------------------------
 
 Predicate Information (identified by operation id):
@@ -145,6 +68,11 @@ Predicate Information (identified by operation id):
 
               AND "L_DISCOUNT"<=.07)
 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
+
 
 Statistics
 ----------------------------------------------------------
@@ -154,7 +82,7 @@ Statistics
           0  physical reads
         124  redo size
         547  bytes sent via SQL*Net to client
-        551  bytes received via SQL*Net from client
+        552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client
           0  sorts (memory)
           0  sorts (disk)
@@ -162,7 +90,7 @@ Statistics
 
 
 
-Elapsed: 00:00:00.99
+Elapsed: 00:00:01.09
 
 Execution Plan
 ----------------------------------------------------------
@@ -173,7 +101,7 @@ Plan hash value: 2287326370
 -------------------------------------------------------------------------------
 |   0 | SELECT STATEMENT   |          |     1 |    16 | 29525   (1)| 00:00:02 |
 |   1 |  SORT AGGREGATE    |          |     1 |    16 |            |          |
-|*  2 |   TABLE ACCESS FULL| LINEITEM |   155K|  2435K| 29525   (1)| 00:00:02 |
+|*  2 |   TABLE ACCESS FULL| LINEITEM |   124K|  1948K| 29525   (1)| 00:00:02 |
 -------------------------------------------------------------------------------
 
 Predicate Information (identified by operation id):
@@ -186,6 +114,11 @@ Predicate Information (identified by operation id):
 
               AND "L_DISCOUNT"<=.07)
 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
+
 
 Statistics
 ----------------------------------------------------------
@@ -195,7 +128,99 @@ Statistics
           0  physical reads
         124  redo size
         547  bytes sent via SQL*Net to client
-        551  bytes received via SQL*Net from client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed
+
+
+
+Elapsed: 00:00:00.93
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2287326370
+
+-------------------------------------------------------------------------------
+| Id  | Operation          | Name     | Rows  | Bytes | Cost (%CPU)| Time     |
+-------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT   |          |     1 |    16 | 29525   (1)| 00:00:02 |
+|   1 |  SORT AGGREGATE    |          |     1 |    16 |            |          |
+|*  2 |   TABLE ACCESS FULL| LINEITEM |   124K|  1948K| 29525   (1)| 00:00:02 |
+-------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("L_SHIPDATE"<TO_DATE(' 1995-01-01 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss') AND "L_QUANTITY"<24 AND "L_DISCOUNT">=.05 AND
+              "L_SHIPDATE">=TO_DATE(' 1994-01-01 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss')
+
+              AND "L_DISCOUNT"<=.07)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     108570  consistent gets
+          0  physical reads
+        124  redo size
+        547  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed
+
+
+
+Elapsed: 00:00:00.95
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2287326370
+
+-------------------------------------------------------------------------------
+| Id  | Operation          | Name     | Rows  | Bytes | Cost (%CPU)| Time     |
+-------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT   |          |     1 |    16 | 29525   (1)| 00:00:02 |
+|   1 |  SORT AGGREGATE    |          |     1 |    16 |            |          |
+|*  2 |   TABLE ACCESS FULL| LINEITEM |   124K|  1948K| 29525   (1)| 00:00:02 |
+-------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("L_SHIPDATE"<TO_DATE(' 1995-01-01 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss') AND "L_QUANTITY"<24 AND "L_DISCOUNT">=.05 AND
+              "L_SHIPDATE">=TO_DATE(' 1994-01-01 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss')
+
+              AND "L_DISCOUNT"<=.07)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     108570  consistent gets
+          0  physical reads
+        124  redo size
+        547  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client
           0  sorts (memory)
           0  sorts (disk)

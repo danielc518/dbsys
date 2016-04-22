@@ -1,595 +1,113 @@
-Elapsed: 00:00:02.94
+Elapsed: 00:00:00.77
 
 Execution Plan
 ----------------------------------------------------------
-Plan hash value: 724235273
+Plan hash value: 367114666
 
 --------------------------------------------------------------------------------
-------------------------------------------
+-----------------------------------------------
 
-| Id  | Operation                        | Name     | Rows  | Bytes | Cost (%CPU
-)| Time     |    TQ  |IN-OUT| PQ Distrib |
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-|   0 | SELECT STATEMENT                 |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |        |      |            |
-
-|   1 |  PX COORDINATOR                  |          |       |       |
- |          |        |      |            |
-
-|   2 |   PX SEND QC (RANDOM)            | :TQ10004 |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | P->S | QC (RAND)  |
-
-|   3 |    HASH GROUP BY                 |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   4 |     PX RECEIVE                   |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   5 |      PX SEND HASH                | :TQ10003 |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,03 | P->P | HASH       |
-
-|   6 |       HASH GROUP BY              |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|*  7 |        HASH JOIN                 |          |   132K|    10M| 15681   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|   8 |         PX RECEIVE               |          | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|   9 |          PX SEND BROADCAST       | :TQ10001 | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,01 | S->P | BROADCAST  |
-
-|  10 |           PX SELECTOR            |          |       |       |
- |          |  Q1,01 | SCWC |            |
-
-|* 11 |            TABLE ACCESS FULL     | CUSTOMER | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,01 | SCWP |            |
-
-|* 12 |         HASH JOIN                |          |   445K|    29M| 14746   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  13 |          BUFFER SORT             |          |       |       |
- |          |  Q1,03 | PCWC |            |
-
-|  14 |           PX RECEIVE             |          |   729K|    14M|  6542   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  15 |            PX SEND HYBRID HASH   | :TQ10000 |   729K|    14M|  6542   (1
-)| 00:00:01 |        | S->P | HYBRID HASH|
-
-|  16 |             STATISTICS COLLECTOR |          |       |       |
- |          |        |      |            |
-
-|* 17 |              TABLE ACCESS FULL   | ORDERS   |   729K|    14M|  6542   (1
-)| 00:00:01 |        |      |            |
-
-|  18 |          PX RECEIVE              |          |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  19 |           PX SEND HYBRID HASH    | :TQ10002 |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | P->P | HYBRID HASH|
-
-|  20 |            PX BLOCK ITERATOR     |          |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | PCWC |            |
-
-|* 21 |             TABLE ACCESS FULL    | LINEITEM |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | PCWP |            |
+| Id  | Operation                            | Name      | Rows  | Bytes | Cost
+(%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
 
 --------------------------------------------------------------------------------
-------------------------------------------
+-----------------------------------------------
+
+|   0 | SELECT STATEMENT                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                      |           |       |       |
+      |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                | :TQ10004  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   4 |     PX RECEIVE                       |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   5 |      PX SEND HASH                    | :TQ10003  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                  |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|*  7 |        HASH JOIN                     |           |  3551 |   423K| 10281
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   8 |         JOIN FILTER CREATE           | :BF0000   |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   9 |          PX RECEIVE                  |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  10 |           PX SEND BROADCAST          | :TQ10002  |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | P->P | BROADCAST  |
+
+|* 11 |            HASH JOIN                 |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  12 |             PX RECEIVE               |           |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  13 |              PX SEND BROADCAST       | :TQ10001  |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | P->P | BROADCAST  |
+
+|  14 |               VIEW                   | VW_GBF_11 |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  15 |                HASH GROUP BY         |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  16 |                 PX RECEIVE           |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  17 |                  PX SEND HASH        | :TQ10000  |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  18 |                   HASH GROUP BY      |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  19 |                    PX BLOCK ITERATOR |           |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 20 |                     TABLE ACCESS FULL| CUSTOMER  |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  21 |             PX BLOCK ITERATOR        |           | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWC |            |
+
+|* 22 |              TABLE ACCESS FULL       | ORDERS    | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  23 |         JOIN FILTER USE              | :BF0000   |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  24 |          PX BLOCK ITERATOR           |           |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWC |            |
+
+|* 25 |           TABLE ACCESS FULL          | LINEITEM  |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
 
 
 Predicate Information (identified by operation id):
 ---------------------------------------------------
 
-   7 - access("C_CUSTKEY"="O_CUSTKEY")
-  11 - filter("C_MKTSEGMENT"='BUILDING')
-  12 - access("L_ORDERKEY"="O_ORDERKEY")
-  17 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
+   7 - access("L_ORDERKEY"="O_ORDERKEY")
+  11 - access("ITEM_1"="O_CUSTKEY")
+  20 - filter("C_MKTSEGMENT"='BUILDING')
+  22 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
 :ss'))
 
-  21 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
-ss'))
+  25 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
+ss') AND
 
-
-Note
------
-   - dynamic statistics used: dynamic sampling (level=AUTO)
-   - Degree of Parallelism is 4 because of table property
-
-
-Statistics
-----------------------------------------------------------
-         83  recursive calls
-          0  db block gets
-     228604  consistent gets
-          0  physical reads
-        808  redo size
-     446407  bytes sent via SQL*Net to client
-       9066  bytes received via SQL*Net from client
-        776  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-      11620  rows processed
-
-
-
-Elapsed: 00:00:03.01
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 724235273
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-| Id  | Operation                        | Name     | Rows  | Bytes | Cost (%CPU
-)| Time     |    TQ  |IN-OUT| PQ Distrib |
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-|   0 | SELECT STATEMENT                 |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |        |      |            |
-
-|   1 |  PX COORDINATOR                  |          |       |       |
- |          |        |      |            |
-
-|   2 |   PX SEND QC (RANDOM)            | :TQ10004 |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | P->S | QC (RAND)  |
-
-|   3 |    HASH GROUP BY                 |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   4 |     PX RECEIVE                   |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   5 |      PX SEND HASH                | :TQ10003 |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,03 | P->P | HASH       |
-
-|   6 |       HASH GROUP BY              |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|*  7 |        HASH JOIN                 |          |   132K|    10M| 15681   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|   8 |         PX RECEIVE               |          | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|   9 |          PX SEND BROADCAST       | :TQ10001 | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,01 | S->P | BROADCAST  |
-
-|  10 |           PX SELECTOR            |          |       |       |
- |          |  Q1,01 | SCWC |            |
-
-|* 11 |            TABLE ACCESS FULL     | CUSTOMER | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,01 | SCWP |            |
-
-|* 12 |         HASH JOIN                |          |   445K|    29M| 14746   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  13 |          BUFFER SORT             |          |       |       |
- |          |  Q1,03 | PCWC |            |
-
-|  14 |           PX RECEIVE             |          |   729K|    14M|  6542   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  15 |            PX SEND HYBRID HASH   | :TQ10000 |   729K|    14M|  6542   (1
-)| 00:00:01 |        | S->P | HYBRID HASH|
-
-|  16 |             STATISTICS COLLECTOR |          |       |       |
- |          |        |      |            |
-
-|* 17 |              TABLE ACCESS FULL   | ORDERS   |   729K|    14M|  6542   (1
-)| 00:00:01 |        |      |            |
-
-|  18 |          PX RECEIVE              |          |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  19 |           PX SEND HYBRID HASH    | :TQ10002 |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | P->P | HYBRID HASH|
-
-|  20 |            PX BLOCK ITERATOR     |          |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | PCWC |            |
-
-|* 21 |             TABLE ACCESS FULL    | LINEITEM |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | PCWP |            |
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   7 - access("C_CUSTKEY"="O_CUSTKEY")
-  11 - filter("C_MKTSEGMENT"='BUILDING')
-  12 - access("L_ORDERKEY"="O_ORDERKEY")
-  17 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
-:ss'))
-
-  21 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
-ss'))
-
-
-Note
------
-   - dynamic statistics used: dynamic sampling (level=AUTO)
-   - Degree of Parallelism is 4 because of table property
-
-
-Statistics
-----------------------------------------------------------
-         69  recursive calls
-          0  db block gets
-     284225  consistent gets
-          0  physical reads
-        764  redo size
-     446407  bytes sent via SQL*Net to client
-       9066  bytes received via SQL*Net from client
-        776  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-      11620  rows processed
-
-
-
-Elapsed: 00:00:02.86
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 4245798213
-
---------------------------------------------------------------------------------
----------------------------------------------
-
-| Id  | Operation                          | Name      | Rows  | Bytes | Cost (%
-CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
-
---------------------------------------------------------------------------------
----------------------------------------------
-
-|   0 | SELECT STATEMENT                   |           |   827 | 52101 | 15688
- (1)| 00:00:01 |        |      |            |
-
-|   1 |  PX COORDINATOR                    |           |       |       |
-    |          |        |      |            |
-
-|   2 |   PX SEND QC (RANDOM)              | :TQ10005  |   827 | 52101 | 15688
- (1)| 00:00:01 |  Q1,05 | P->S | QC (RAND)  |
-
-|   3 |    HASH GROUP BY                   |           |   827 | 52101 | 15688
- (1)| 00:00:01 |  Q1,05 | PCWP |            |
-
-|   4 |     PX RECEIVE                     |           |   827 | 52101 | 15688
- (1)| 00:00:01 |  Q1,05 | PCWP |            |
-
-|   5 |      PX SEND HASH                  | :TQ10004  |   827 | 52101 | 15688
- (1)| 00:00:01 |  Q1,04 | P->P | HASH       |
-
-|   6 |       HASH GROUP BY                |           |   827 | 52101 | 15688
- (1)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|*  7 |        HASH JOIN                   |           |   132K|  8158K| 15686
- (1)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   8 |         PX RECEIVE                 |           | 30000 |   468K|   935
- (1)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   9 |          PX SEND BROADCAST         | :TQ10001  | 30000 |   468K|   935
- (1)| 00:00:01 |  Q1,01 | S->P | BROADCAST  |
-
-|  10 |           PX SELECTOR              |           |       |       |
-    |          |  Q1,01 | SCWC |            |
-
-|* 11 |            TABLE ACCESS FULL       | CUSTOMER  | 30000 |   468K|   935
- (1)| 00:00:01 |  Q1,01 | SCWP |            |
-
-|* 12 |         HASH JOIN                  |           |   445K|    19M| 14750
- (1)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|  13 |          PX RECEIVE                |           |   443K|    10M|  8207
- (1)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|  14 |           PX SEND HYBRID HASH      | :TQ10002  |   443K|    10M|  8207
- (1)| 00:00:01 |  Q1,02 | P->P | HYBRID HASH|
-
-|  15 |            STATISTICS COLLECTOR    |           |       |       |
-    |          |  Q1,02 | PCWC |            |
-
-|  16 |             VIEW                   | VW_GBC_11 |   443K|    10M|  8207
- (1)| 00:00:01 |  Q1,02 | PCWP |            |
-
-|  17 |              HASH GROUP BY         |           |   443K|    20M|  8207
- (1)| 00:00:01 |  Q1,02 | PCWP |            |
-
-|  18 |               PX RECEIVE           |           |   443K|    20M|  8207
- (1)| 00:00:01 |  Q1,02 | PCWP |            |
-
-|  19 |                PX SEND HASH        | :TQ10000  |   443K|    20M|  8207
- (1)| 00:00:01 |  Q1,00 | P->P | HASH       |
-
-|  20 |                 HASH GROUP BY      |           |   443K|    20M|  8207
- (1)| 00:00:01 |  Q1,00 | PCWP |            |
-
-|  21 |                  PX BLOCK ITERATOR |           |   443K|    20M|  8203
- (1)| 00:00:01 |  Q1,00 | PCWC |            |
-
-|* 22 |                   TABLE ACCESS FULL| LINEITEM  |   443K|    20M|  8203
- (1)| 00:00:01 |  Q1,00 | PCWP |            |
-
-|  23 |          PX RECEIVE                |           |   729K|    14M|  6542
- (1)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|  24 |           PX SEND HYBRID HASH      | :TQ10003  |   729K|    14M|  6542
- (1)| 00:00:01 |  Q1,03 | S->P | HYBRID HASH|
-
-|  25 |            PX SELECTOR             |           |       |       |
-    |          |  Q1,03 | SCWC |            |
-
-|* 26 |             TABLE ACCESS FULL      | ORDERS    |   729K|    14M|  6542
- (1)| 00:00:01 |  Q1,03 | SCWP |            |
-
---------------------------------------------------------------------------------
----------------------------------------------
-
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   7 - access("C_CUSTKEY"="O_CUSTKEY")
-  11 - filter("C_MKTSEGMENT"='BUILDING')
-  12 - access("ITEM_1"="O_ORDERKEY")
-  22 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
-ss'))
-
-  26 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
-:ss'))
-
-
-Note
------
-   - dynamic statistics used: dynamic sampling (level=AUTO)
-   - Degree of Parallelism is 4 because of table property
-
-
-Statistics
-----------------------------------------------------------
-         69  recursive calls
-          0  db block gets
-     267961  consistent gets
-          0  physical reads
-        764  redo size
-     446343  bytes sent via SQL*Net to client
-       9066  bytes received via SQL*Net from client
-        776  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-      11620  rows processed
-
-
-
-Elapsed: 00:00:03.12
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 724235273
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-| Id  | Operation                        | Name     | Rows  | Bytes | Cost (%CPU
-)| Time     |    TQ  |IN-OUT| PQ Distrib |
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-|   0 | SELECT STATEMENT                 |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |        |      |            |
-
-|   1 |  PX COORDINATOR                  |          |       |       |
- |          |        |      |            |
-
-|   2 |   PX SEND QC (RANDOM)            | :TQ10004 |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | P->S | QC (RAND)  |
-
-|   3 |    HASH GROUP BY                 |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   4 |     PX RECEIVE                   |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   5 |      PX SEND HASH                | :TQ10003 |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,03 | P->P | HASH       |
-
-|   6 |       HASH GROUP BY              |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|*  7 |        HASH JOIN                 |          |   132K|    10M| 15681   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|   8 |         PX RECEIVE               |          | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|   9 |          PX SEND BROADCAST       | :TQ10001 | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,01 | S->P | BROADCAST  |
-
-|  10 |           PX SELECTOR            |          |       |       |
- |          |  Q1,01 | SCWC |            |
-
-|* 11 |            TABLE ACCESS FULL     | CUSTOMER | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,01 | SCWP |            |
-
-|* 12 |         HASH JOIN                |          |   445K|    29M| 14746   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  13 |          BUFFER SORT             |          |       |       |
- |          |  Q1,03 | PCWC |            |
-
-|  14 |           PX RECEIVE             |          |   729K|    14M|  6542   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  15 |            PX SEND HYBRID HASH   | :TQ10000 |   729K|    14M|  6542   (1
-)| 00:00:01 |        | S->P | HYBRID HASH|
-
-|  16 |             STATISTICS COLLECTOR |          |       |       |
- |          |        |      |            |
-
-|* 17 |              TABLE ACCESS FULL   | ORDERS   |   729K|    14M|  6542   (1
-)| 00:00:01 |        |      |            |
-
-|  18 |          PX RECEIVE              |          |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  19 |           PX SEND HYBRID HASH    | :TQ10002 |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | P->P | HYBRID HASH|
-
-|  20 |            PX BLOCK ITERATOR     |          |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | PCWC |            |
-
-|* 21 |             TABLE ACCESS FULL    | LINEITEM |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | PCWP |            |
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   7 - access("C_CUSTKEY"="O_CUSTKEY")
-  11 - filter("C_MKTSEGMENT"='BUILDING')
-  12 - access("L_ORDERKEY"="O_ORDERKEY")
-  17 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
-:ss'))
-
-  21 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
-ss'))
-
-
-Note
------
-   - dynamic statistics used: dynamic sampling (level=AUTO)
-   - Degree of Parallelism is 4 because of table property
-
-
-Statistics
-----------------------------------------------------------
-         76  recursive calls
-          0  db block gets
-     288357  consistent gets
-          0  physical reads
-        764  redo size
-     446415  bytes sent via SQL*Net to client
-       9066  bytes received via SQL*Net from client
-        776  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-      11620  rows processed
-
-
-
-Elapsed: 00:00:01.28
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 724235273
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-| Id  | Operation                        | Name     | Rows  | Bytes | Cost (%CPU
-)| Time     |    TQ  |IN-OUT| PQ Distrib |
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-|   0 | SELECT STATEMENT                 |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |        |      |            |
-
-|   1 |  PX COORDINATOR                  |          |       |       |
- |          |        |      |            |
-
-|   2 |   PX SEND QC (RANDOM)            | :TQ10004 |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | P->S | QC (RAND)  |
-
-|   3 |    HASH GROUP BY                 |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   4 |     PX RECEIVE                   |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,04 | PCWP |            |
-
-|   5 |      PX SEND HASH                | :TQ10003 |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,03 | P->P | HASH       |
-
-|   6 |       HASH GROUP BY              |          |   827 | 70295 | 15683   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|*  7 |        HASH JOIN                 |          |   132K|    10M| 15681   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|   8 |         PX RECEIVE               |          | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|   9 |          PX SEND BROADCAST       | :TQ10001 | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,01 | S->P | BROADCAST  |
-
-|  10 |           PX SELECTOR            |          |       |       |
- |          |  Q1,01 | SCWC |            |
-
-|* 11 |            TABLE ACCESS FULL     | CUSTOMER | 30000 |   468K|   935   (1
-)| 00:00:01 |  Q1,01 | SCWP |            |
-
-|* 12 |         HASH JOIN                |          |   445K|    29M| 14746   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  13 |          BUFFER SORT             |          |       |       |
- |          |  Q1,03 | PCWC |            |
-
-|  14 |           PX RECEIVE             |          |   729K|    14M|  6542   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  15 |            PX SEND HYBRID HASH   | :TQ10000 |   729K|    14M|  6542   (1
-)| 00:00:01 |        | S->P | HYBRID HASH|
-
-|  16 |             STATISTICS COLLECTOR |          |       |       |
- |          |        |      |            |
-
-|* 17 |              TABLE ACCESS FULL   | ORDERS   |   729K|    14M|  6542   (1
-)| 00:00:01 |        |      |            |
-
-|  18 |          PX RECEIVE              |          |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,03 | PCWP |            |
-
-|  19 |           PX SEND HYBRID HASH    | :TQ10002 |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | P->P | HYBRID HASH|
-
-|  20 |            PX BLOCK ITERATOR     |          |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | PCWC |            |
-
-|* 21 |             TABLE ACCESS FULL    | LINEITEM |   443K|    20M|  8203   (1
-)| 00:00:01 |  Q1,02 | PCWP |            |
-
---------------------------------------------------------------------------------
-------------------------------------------
-
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   7 - access("C_CUSTKEY"="O_CUSTKEY")
-  11 - filter("C_MKTSEGMENT"='BUILDING')
-  12 - access("L_ORDERKEY"="O_ORDERKEY")
-  17 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
-:ss'))
-
-  21 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
-ss'))
-
+              SYS_OP_BLOOM_FILTER(:BF0000,"L_ORDERKEY"))
 
 Note
 -----
@@ -601,10 +119,542 @@ Statistics
 ----------------------------------------------------------
          24  recursive calls
           0  db block gets
-     137151  consistent gets
-          0  physical reads
-        568  redo size
-     446391  bytes sent via SQL*Net to client
+     136891  consistent gets
+     132611  physical reads
+        364  redo size
+     446359  bytes sent via SQL*Net to client
+       9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:00.83
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 367114666
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+| Id  | Operation                            | Name      | Rows  | Bytes | Cost
+(%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+|   0 | SELECT STATEMENT                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                      |           |       |       |
+      |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                | :TQ10004  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   4 |     PX RECEIVE                       |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   5 |      PX SEND HASH                    | :TQ10003  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                  |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|*  7 |        HASH JOIN                     |           |  3551 |   423K| 10281
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   8 |         JOIN FILTER CREATE           | :BF0000   |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   9 |          PX RECEIVE                  |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  10 |           PX SEND BROADCAST          | :TQ10002  |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | P->P | BROADCAST  |
+
+|* 11 |            HASH JOIN                 |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  12 |             PX RECEIVE               |           |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  13 |              PX SEND BROADCAST       | :TQ10001  |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | P->P | BROADCAST  |
+
+|  14 |               VIEW                   | VW_GBF_11 |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  15 |                HASH GROUP BY         |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  16 |                 PX RECEIVE           |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  17 |                  PX SEND HASH        | :TQ10000  |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  18 |                   HASH GROUP BY      |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  19 |                    PX BLOCK ITERATOR |           |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 20 |                     TABLE ACCESS FULL| CUSTOMER  |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  21 |             PX BLOCK ITERATOR        |           | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWC |            |
+
+|* 22 |              TABLE ACCESS FULL       | ORDERS    | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  23 |         JOIN FILTER USE              | :BF0000   |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  24 |          PX BLOCK ITERATOR           |           |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWC |            |
+
+|* 25 |           TABLE ACCESS FULL          | LINEITEM  |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("L_ORDERKEY"="O_ORDERKEY")
+  11 - access("ITEM_1"="O_CUSTKEY")
+  20 - filter("C_MKTSEGMENT"='BUILDING')
+  22 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+  25 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
+ss') AND
+
+              SYS_OP_BLOOM_FILTER(:BF0000,"L_ORDERKEY"))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     136891  consistent gets
+     132611  physical reads
+        364  redo size
+     446383  bytes sent via SQL*Net to client
+       9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:00.80
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 367114666
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+| Id  | Operation                            | Name      | Rows  | Bytes | Cost
+(%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+|   0 | SELECT STATEMENT                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                      |           |       |       |
+      |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                | :TQ10004  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   4 |     PX RECEIVE                       |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   5 |      PX SEND HASH                    | :TQ10003  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                  |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|*  7 |        HASH JOIN                     |           |  3551 |   423K| 10281
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   8 |         JOIN FILTER CREATE           | :BF0000   |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   9 |          PX RECEIVE                  |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  10 |           PX SEND BROADCAST          | :TQ10002  |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | P->P | BROADCAST  |
+
+|* 11 |            HASH JOIN                 |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  12 |             PX RECEIVE               |           |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  13 |              PX SEND BROADCAST       | :TQ10001  |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | P->P | BROADCAST  |
+
+|  14 |               VIEW                   | VW_GBF_11 |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  15 |                HASH GROUP BY         |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  16 |                 PX RECEIVE           |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  17 |                  PX SEND HASH        | :TQ10000  |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  18 |                   HASH GROUP BY      |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  19 |                    PX BLOCK ITERATOR |           |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 20 |                     TABLE ACCESS FULL| CUSTOMER  |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  21 |             PX BLOCK ITERATOR        |           | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWC |            |
+
+|* 22 |              TABLE ACCESS FULL       | ORDERS    | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  23 |         JOIN FILTER USE              | :BF0000   |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  24 |          PX BLOCK ITERATOR           |           |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWC |            |
+
+|* 25 |           TABLE ACCESS FULL          | LINEITEM  |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("L_ORDERKEY"="O_ORDERKEY")
+  11 - access("ITEM_1"="O_CUSTKEY")
+  20 - filter("C_MKTSEGMENT"='BUILDING')
+  22 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+  25 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
+ss') AND
+
+              SYS_OP_BLOOM_FILTER(:BF0000,"L_ORDERKEY"))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     136891  consistent gets
+     132611  physical reads
+        408  redo size
+     446367  bytes sent via SQL*Net to client
+       9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:00.80
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 367114666
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+| Id  | Operation                            | Name      | Rows  | Bytes | Cost
+(%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+|   0 | SELECT STATEMENT                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                      |           |       |       |
+      |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                | :TQ10004  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   4 |     PX RECEIVE                       |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   5 |      PX SEND HASH                    | :TQ10003  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                  |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|*  7 |        HASH JOIN                     |           |  3551 |   423K| 10281
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   8 |         JOIN FILTER CREATE           | :BF0000   |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   9 |          PX RECEIVE                  |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  10 |           PX SEND BROADCAST          | :TQ10002  |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | P->P | BROADCAST  |
+
+|* 11 |            HASH JOIN                 |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  12 |             PX RECEIVE               |           |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  13 |              PX SEND BROADCAST       | :TQ10001  |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | P->P | BROADCAST  |
+
+|  14 |               VIEW                   | VW_GBF_11 |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  15 |                HASH GROUP BY         |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  16 |                 PX RECEIVE           |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  17 |                  PX SEND HASH        | :TQ10000  |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  18 |                   HASH GROUP BY      |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  19 |                    PX BLOCK ITERATOR |           |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 20 |                     TABLE ACCESS FULL| CUSTOMER  |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  21 |             PX BLOCK ITERATOR        |           | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWC |            |
+
+|* 22 |              TABLE ACCESS FULL       | ORDERS    | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  23 |         JOIN FILTER USE              | :BF0000   |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  24 |          PX BLOCK ITERATOR           |           |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWC |            |
+
+|* 25 |           TABLE ACCESS FULL          | LINEITEM  |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("L_ORDERKEY"="O_ORDERKEY")
+  11 - access("ITEM_1"="O_CUSTKEY")
+  20 - filter("C_MKTSEGMENT"='BUILDING')
+  22 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+  25 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
+ss') AND
+
+              SYS_OP_BLOOM_FILTER(:BF0000,"L_ORDERKEY"))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     136891  consistent gets
+     132611  physical reads
+        364  redo size
+     446375  bytes sent via SQL*Net to client
+       9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:00.85
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 367114666
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+| Id  | Operation                            | Name      | Rows  | Bytes | Cost
+(%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+|   0 | SELECT STATEMENT                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                      |           |       |       |
+      |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                | :TQ10004  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                     |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   4 |     PX RECEIVE                       |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,04 | PCWP |            |
+
+|   5 |      PX SEND HASH                    | :TQ10003  |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                  |           |  3551 |   423K| 10282
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|*  7 |        HASH JOIN                     |           |  3551 |   423K| 10281
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   8 |         JOIN FILTER CREATE           | :BF0000   |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|   9 |          PX RECEIVE                  |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  10 |           PX SEND BROADCAST          | :TQ10002  |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | P->P | BROADCAST  |
+
+|* 11 |            HASH JOIN                 |           |  3252 |   235K|  2078
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  12 |             PX RECEIVE               |           |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  13 |              PX SEND BROADCAST       | :TQ10001  |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | P->P | BROADCAST  |
+
+|  14 |               VIEW                   | VW_GBF_11 |  2802 | 72852 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  15 |                HASH GROUP BY         |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  16 |                 PX RECEIVE           |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  17 |                  PX SEND HASH        | :TQ10000  |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  18 |                   HASH GROUP BY      |           |  2802 | 70050 |   261
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  19 |                    PX BLOCK ITERATOR |           |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 20 |                     TABLE ACCESS FULL| CUSTOMER  |  2802 | 70050 |   260
+   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  21 |             PX BLOCK ITERATOR        |           | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWC |            |
+
+|* 22 |              TABLE ACCESS FULL       | ORDERS    | 98269 |  4606K|  1816
+   (1)| 00:00:01 |  Q1,02 | PCWP |            |
+
+|  23 |         JOIN FILTER USE              | :BF0000   |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  24 |          PX BLOCK ITERATOR           |           |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWC |            |
+
+|* 25 |           TABLE ACCESS FULL          | LINEITEM  |   443K|    20M|  8203
+   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("L_ORDERKEY"="O_ORDERKEY")
+  11 - access("ITEM_1"="O_CUSTKEY")
+  20 - filter("C_MKTSEGMENT"='BUILDING')
+  22 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+  25 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd hh24:mi:
+ss') AND
+
+              SYS_OP_BLOOM_FILTER(:BF0000,"L_ORDERKEY"))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     136891  consistent gets
+     132611  physical reads
+        408  redo size
+     446367  bytes sent via SQL*Net to client
        9066  bytes received via SQL*Net from client
         776  SQL*Net roundtrips to/from client
           0  sorts (memory)

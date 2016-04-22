@@ -1,76 +1,130 @@
-Elapsed: 00:00:00.45
+Elapsed: 00:00:00.15
 
 Execution Plan
 ----------------------------------------------------------
-Plan hash value: 1384268742
+Plan hash value: 1374175114
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
 
-| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
- |
-
---------------------------------------------------------------------------------
---
-
-|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
- |
-
-|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
- |
-
-|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
- |
-
-|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
- |
-
-|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
- |
+| Id  | Operation                         | Name     | Rows  | Bytes | Cost (%CP
+U)| Time     |    TQ  |IN-OUT| PQ Distrib |
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
+
+|   0 | SELECT STATEMENT                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                   |          |       |       |
+  |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)             | :TQ20003 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   4 |     PX RECEIVE                    |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   5 |      PX SEND HASH                 | :TQ20002 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY               |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|*  7 |        HASH JOIN ANTI             |          |    10 |   560 |  2074   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   8 |         PX RECEIVE                |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   9 |          PX SEND HASH             | :TQ20000 |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | P->P | HASH       |
+
+|  10 |           PX BLOCK ITERATOR       |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWC |            |
+
+|* 11 |            TABLE ACCESS FULL      | CUSTOMER |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWP |            |
+
+|  12 |             SORT AGGREGATE        |          |     1 |    30 |
+  |          |  Q2,00 | PCWP |            |
+
+|  13 |              PX COORDINATOR       |          |       |       |
+  |          |        |      |            |
+
+|  14 |               PX SEND QC (RANDOM) | :TQ10000 |     1 |    30 |
+  |          |  Q1,00 | P->S | QC (RAND)  |
+
+|  15 |                SORT AGGREGATE     |          |     1 |    30 |
+  |          |  Q1,00 | PCWP |            |
+
+|  16 |                 PX BLOCK ITERATOR |          | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 17 |                  TABLE ACCESS FULL| CUSTOMER | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  18 |         PX RECEIVE                |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|  19 |          PX SEND HASH             | :TQ20001 |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | P->P | HASH       |
+
+|  20 |           PX BLOCK ITERATOR       |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWC |            |
+
+|  21 |            TABLE ACCESS FULL      | ORDERS   |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-------------------------------------------
 
 
 Predicate Information (identified by operation id):
 ---------------------------------------------------
 
-   2 - access("O_CUSTKEY"="C_CUSTKEY")
-   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
-              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
-L")
+   7 - access("O_CUSTKEY"="C_CUSTKEY")
+  11 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR SUBST
+R("C_PHONE",1,2)='23' OR
 
-              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
-              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
-              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17')))
-   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
-              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
-              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR SUBSTR
+("C_PHONE",1,2)='18' OR
+
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG(SYS_OP_CS
+R(SYS_OP_MSR(AVG("C_ACCTBAL")),0)) FROM
+
+              "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE"
+,1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17')))
+  17 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHON
+E",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
               SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
 
 Note
 -----
    - dynamic statistics used: dynamic sampling (level=2)
-   - 2 Sql Plan Directives used for this statement
+   - Degree of Parallelism is 4 because of table property
+   - 1 Sql Plan Directive used for this statement
 
 
 Statistics
 ----------------------------------------------------------
-          0  recursive calls
+         36  recursive calls
           0  db block gets
-      30950  consistent gets
-          0  physical reads
-        204  redo size
+      31866  consistent gets
+      24062  physical reads
+        728  redo size
         855  bytes sent via SQL*Net to client
         552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client
@@ -80,79 +134,133 @@ Statistics
 
 
 
-Elapsed: 00:00:00.40
+Elapsed: 00:00:00.14
 
 Execution Plan
 ----------------------------------------------------------
-Plan hash value: 1384268742
+Plan hash value: 1374175114
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
 
-| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
- |
-
---------------------------------------------------------------------------------
---
-
-|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
- |
-
-|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
- |
-
-|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
- |
-
-|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
- |
-
-|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
- |
+| Id  | Operation                         | Name     | Rows  | Bytes | Cost (%CP
+U)| Time     |    TQ  |IN-OUT| PQ Distrib |
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
+
+|   0 | SELECT STATEMENT                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                   |          |       |       |
+  |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)             | :TQ20003 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   4 |     PX RECEIVE                    |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   5 |      PX SEND HASH                 | :TQ20002 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY               |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|*  7 |        HASH JOIN ANTI             |          |    10 |   560 |  2074   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   8 |         PX RECEIVE                |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   9 |          PX SEND HASH             | :TQ20000 |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | P->P | HASH       |
+
+|  10 |           PX BLOCK ITERATOR       |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWC |            |
+
+|* 11 |            TABLE ACCESS FULL      | CUSTOMER |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWP |            |
+
+|  12 |             SORT AGGREGATE        |          |     1 |    30 |
+  |          |  Q2,00 | PCWP |            |
+
+|  13 |              PX COORDINATOR       |          |       |       |
+  |          |        |      |            |
+
+|  14 |               PX SEND QC (RANDOM) | :TQ10000 |     1 |    30 |
+  |          |  Q1,00 | P->S | QC (RAND)  |
+
+|  15 |                SORT AGGREGATE     |          |     1 |    30 |
+  |          |  Q1,00 | PCWP |            |
+
+|  16 |                 PX BLOCK ITERATOR |          | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 17 |                  TABLE ACCESS FULL| CUSTOMER | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  18 |         PX RECEIVE                |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|  19 |          PX SEND HASH             | :TQ20001 |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | P->P | HASH       |
+
+|  20 |           PX BLOCK ITERATOR       |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWC |            |
+
+|  21 |            TABLE ACCESS FULL      | ORDERS   |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-------------------------------------------
 
 
 Predicate Information (identified by operation id):
 ---------------------------------------------------
 
-   2 - access("O_CUSTKEY"="C_CUSTKEY")
-   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
-              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
-L")
+   7 - access("O_CUSTKEY"="C_CUSTKEY")
+  11 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR SUBST
+R("C_PHONE",1,2)='23' OR
 
-              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
-              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
-              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17')))
-   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
-              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
-              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR SUBSTR
+("C_PHONE",1,2)='18' OR
+
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG(SYS_OP_CS
+R(SYS_OP_MSR(AVG("C_ACCTBAL")),0)) FROM
+
+              "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE"
+,1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17')))
+  17 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHON
+E",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
               SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
 
 Note
 -----
    - dynamic statistics used: dynamic sampling (level=2)
-   - 2 Sql Plan Directives used for this statement
+   - Degree of Parallelism is 4 because of table property
+   - 1 Sql Plan Directive used for this statement
 
 
 Statistics
 ----------------------------------------------------------
-          0  recursive calls
+         36  recursive calls
           0  db block gets
-      30950  consistent gets
-          0  physical reads
-        204  redo size
+      31866  consistent gets
+      24062  physical reads
+        728  redo size
         855  bytes sent via SQL*Net to client
         552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client
@@ -162,79 +270,133 @@ Statistics
 
 
 
-Elapsed: 00:00:00.39
+Elapsed: 00:00:00.15
 
 Execution Plan
 ----------------------------------------------------------
-Plan hash value: 1384268742
+Plan hash value: 1374175114
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
 
-| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
- |
-
---------------------------------------------------------------------------------
---
-
-|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
- |
-
-|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
- |
-
-|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
- |
-
-|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
- |
-
-|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
- |
+| Id  | Operation                         | Name     | Rows  | Bytes | Cost (%CP
+U)| Time     |    TQ  |IN-OUT| PQ Distrib |
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
+
+|   0 | SELECT STATEMENT                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                   |          |       |       |
+  |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)             | :TQ20003 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   4 |     PX RECEIVE                    |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   5 |      PX SEND HASH                 | :TQ20002 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY               |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|*  7 |        HASH JOIN ANTI             |          |    10 |   560 |  2074   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   8 |         PX RECEIVE                |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   9 |          PX SEND HASH             | :TQ20000 |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | P->P | HASH       |
+
+|  10 |           PX BLOCK ITERATOR       |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWC |            |
+
+|* 11 |            TABLE ACCESS FULL      | CUSTOMER |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWP |            |
+
+|  12 |             SORT AGGREGATE        |          |     1 |    30 |
+  |          |  Q2,00 | PCWP |            |
+
+|  13 |              PX COORDINATOR       |          |       |       |
+  |          |        |      |            |
+
+|  14 |               PX SEND QC (RANDOM) | :TQ10000 |     1 |    30 |
+  |          |  Q1,00 | P->S | QC (RAND)  |
+
+|  15 |                SORT AGGREGATE     |          |     1 |    30 |
+  |          |  Q1,00 | PCWP |            |
+
+|  16 |                 PX BLOCK ITERATOR |          | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 17 |                  TABLE ACCESS FULL| CUSTOMER | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  18 |         PX RECEIVE                |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|  19 |          PX SEND HASH             | :TQ20001 |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | P->P | HASH       |
+
+|  20 |           PX BLOCK ITERATOR       |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWC |            |
+
+|  21 |            TABLE ACCESS FULL      | ORDERS   |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-------------------------------------------
 
 
 Predicate Information (identified by operation id):
 ---------------------------------------------------
 
-   2 - access("O_CUSTKEY"="C_CUSTKEY")
-   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
-              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
-L")
+   7 - access("O_CUSTKEY"="C_CUSTKEY")
+  11 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR SUBST
+R("C_PHONE",1,2)='23' OR
 
-              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
-              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
-              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17')))
-   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
-              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
-              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR SUBSTR
+("C_PHONE",1,2)='18' OR
+
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG(SYS_OP_CS
+R(SYS_OP_MSR(AVG("C_ACCTBAL")),0)) FROM
+
+              "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE"
+,1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17')))
+  17 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHON
+E",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
               SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
 
 Note
 -----
    - dynamic statistics used: dynamic sampling (level=2)
-   - 2 Sql Plan Directives used for this statement
+   - Degree of Parallelism is 4 because of table property
+   - 1 Sql Plan Directive used for this statement
 
 
 Statistics
 ----------------------------------------------------------
-          0  recursive calls
+         36  recursive calls
           0  db block gets
-      30950  consistent gets
-          0  physical reads
-        204  redo size
+      31866  consistent gets
+      24062  physical reads
+        728  redo size
         855  bytes sent via SQL*Net to client
         552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client
@@ -244,79 +406,133 @@ Statistics
 
 
 
-Elapsed: 00:00:00.38
+Elapsed: 00:00:00.16
 
 Execution Plan
 ----------------------------------------------------------
-Plan hash value: 1384268742
+Plan hash value: 1374175114
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
 
-| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
- |
-
---------------------------------------------------------------------------------
---
-
-|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
- |
-
-|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
- |
-
-|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
- |
-
-|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
- |
-
-|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
- |
+| Id  | Operation                         | Name     | Rows  | Bytes | Cost (%CP
+U)| Time     |    TQ  |IN-OUT| PQ Distrib |
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
+
+|   0 | SELECT STATEMENT                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                   |          |       |       |
+  |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)             | :TQ20003 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   4 |     PX RECEIVE                    |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   5 |      PX SEND HASH                 | :TQ20002 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY               |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|*  7 |        HASH JOIN ANTI             |          |    10 |   560 |  2074   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   8 |         PX RECEIVE                |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   9 |          PX SEND HASH             | :TQ20000 |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | P->P | HASH       |
+
+|  10 |           PX BLOCK ITERATOR       |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWC |            |
+
+|* 11 |            TABLE ACCESS FULL      | CUSTOMER |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWP |            |
+
+|  12 |             SORT AGGREGATE        |          |     1 |    30 |
+  |          |  Q2,00 | PCWP |            |
+
+|  13 |              PX COORDINATOR       |          |       |       |
+  |          |        |      |            |
+
+|  14 |               PX SEND QC (RANDOM) | :TQ10000 |     1 |    30 |
+  |          |  Q1,00 | P->S | QC (RAND)  |
+
+|  15 |                SORT AGGREGATE     |          |     1 |    30 |
+  |          |  Q1,00 | PCWP |            |
+
+|  16 |                 PX BLOCK ITERATOR |          | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 17 |                  TABLE ACCESS FULL| CUSTOMER | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  18 |         PX RECEIVE                |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|  19 |          PX SEND HASH             | :TQ20001 |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | P->P | HASH       |
+
+|  20 |           PX BLOCK ITERATOR       |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWC |            |
+
+|  21 |            TABLE ACCESS FULL      | ORDERS   |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-------------------------------------------
 
 
 Predicate Information (identified by operation id):
 ---------------------------------------------------
 
-   2 - access("O_CUSTKEY"="C_CUSTKEY")
-   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
-              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
-L")
+   7 - access("O_CUSTKEY"="C_CUSTKEY")
+  11 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR SUBST
+R("C_PHONE",1,2)='23' OR
 
-              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
-              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
-              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17')))
-   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
-              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
-              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR SUBSTR
+("C_PHONE",1,2)='18' OR
+
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG(SYS_OP_CS
+R(SYS_OP_MSR(AVG("C_ACCTBAL")),0)) FROM
+
+              "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE"
+,1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17')))
+  17 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHON
+E",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
               SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
 
 Note
 -----
    - dynamic statistics used: dynamic sampling (level=2)
-   - 2 Sql Plan Directives used for this statement
+   - Degree of Parallelism is 4 because of table property
+   - 1 Sql Plan Directive used for this statement
 
 
 Statistics
 ----------------------------------------------------------
-          0  recursive calls
+         36  recursive calls
           0  db block gets
-      30950  consistent gets
-          0  physical reads
-        204  redo size
+      31866  consistent gets
+      24062  physical reads
+        684  redo size
         855  bytes sent via SQL*Net to client
         552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client
@@ -326,79 +542,133 @@ Statistics
 
 
 
-Elapsed: 00:00:00.47
+Elapsed: 00:00:00.18
 
 Execution Plan
 ----------------------------------------------------------
-Plan hash value: 1384268742
+Plan hash value: 1374175114
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
 
-| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
- |
-
---------------------------------------------------------------------------------
---
-
-|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
- |
-
-|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
- |
-
-|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
- |
-
-|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
- |
-
-|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
- |
-
-|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
- |
+| Id  | Operation                         | Name     | Rows  | Bytes | Cost (%CP
+U)| Time     |    TQ  |IN-OUT| PQ Distrib |
 
 --------------------------------------------------------------------------------
---
+-------------------------------------------
+
+|   0 | SELECT STATEMENT                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                   |          |       |       |
+  |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)             | :TQ20003 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                  |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   4 |     PX RECEIVE                    |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,03 | PCWP |            |
+
+|   5 |      PX SEND HASH                 | :TQ20002 |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY               |          |    10 |   560 |  2335   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|*  7 |        HASH JOIN ANTI             |          |    10 |   560 |  2074   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   8 |         PX RECEIVE                |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|   9 |          PX SEND HASH             | :TQ20000 |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | P->P | HASH       |
+
+|  10 |           PX BLOCK ITERATOR       |          |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWC |            |
+
+|* 11 |            TABLE ACCESS FULL      | CUSTOMER |   952 | 40936 |   260   (
+1)| 00:00:01 |  Q2,00 | PCWP |            |
+
+|  12 |             SORT AGGREGATE        |          |     1 |    30 |
+  |          |  Q2,00 | PCWP |            |
+
+|  13 |              PX COORDINATOR       |          |       |       |
+  |          |        |      |            |
+
+|  14 |               PX SEND QC (RANDOM) | :TQ10000 |     1 |    30 |
+  |          |  Q1,00 | P->S | QC (RAND)  |
+
+|  15 |                SORT AGGREGATE     |          |     1 |    30 |
+  |          |  Q1,00 | PCWP |            |
+
+|  16 |                 PX BLOCK ITERATOR |          | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|* 17 |                  TABLE ACCESS FULL| CUSTOMER | 44719 |  1310K|   260   (
+1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  18 |         PX RECEIVE                |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,02 | PCWP |            |
+
+|  19 |          PX SEND HASH             | :TQ20001 |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | P->P | HASH       |
+
+|  20 |           PX BLOCK ITERATOR       |          |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWC |            |
+
+|  21 |            TABLE ACCESS FULL      | ORDERS   |  1400K|    17M|  1813   (
+1)| 00:00:01 |  Q2,01 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-------------------------------------------
 
 
 Predicate Information (identified by operation id):
 ---------------------------------------------------
 
-   2 - access("O_CUSTKEY"="C_CUSTKEY")
-   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
-              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
-L")
+   7 - access("O_CUSTKEY"="C_CUSTKEY")
+  11 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR SUBST
+R("C_PHONE",1,2)='23' OR
 
-              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
-              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
-              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
-              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
-              SUBSTR("C_PHONE",1,2)='17')))
-   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
-              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
-              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR SUBSTR
+("C_PHONE",1,2)='18' OR
+
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG(SYS_OP_CS
+R(SYS_OP_MSR(AVG("C_ACCTBAL")),0)) FROM
+
+              "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE"
+,1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17')))
+  17 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHON
+E",1,2)='31' OR
+
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR SUBSTR
+("C_PHONE",1,2)='30' OR
+
               SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
 
 Note
 -----
    - dynamic statistics used: dynamic sampling (level=2)
-   - 2 Sql Plan Directives used for this statement
+   - Degree of Parallelism is 4 because of table property
+   - 1 Sql Plan Directive used for this statement
 
 
 Statistics
 ----------------------------------------------------------
-          0  recursive calls
+         36  recursive calls
           0  db block gets
-      30950  consistent gets
-          0  physical reads
-        204  redo size
+      31866  consistent gets
+      24062  physical reads
+        728  redo size
         855  bytes sent via SQL*Net to client
         552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client

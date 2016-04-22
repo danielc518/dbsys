@@ -1,4 +1,4 @@
-Elapsed: 00:00:02.96
+Elapsed: 00:00:02.17
 
 Execution Plan
 ----------------------------------------------------------
@@ -13,25 +13,25 @@ ime     |
 --------------------------------------------------------------------------------
 ---------
 
-|   0 | SELECT STATEMENT     |          | 11620 |   635K|       | 42266   (1)| 0
+|   0 | SELECT STATEMENT     |          | 11620 |   567K|       | 42593   (1)| 0
 0:00:02 |
 
-|   1 |  HASH GROUP BY       |          | 11620 |   635K|       | 42266   (1)| 0
+|   1 |  HASH GROUP BY       |          | 11620 |   567K|       | 42593   (1)| 0
 0:00:02 |
 
-|*  2 |   HASH JOIN          |          |   489K|    26M|    10M| 42250   (1)| 0
+|*  2 |   HASH JOIN          |          |   524K|    25M|  9192K| 42576   (1)| 0
 0:00:02 |
 
-|*  3 |    HASH JOIN         |          |   217K|  7847K|       |  7480   (1)| 0
+|*  3 |    HASH JOIN         |          |   218K|  6622K|       |  7480   (1)| 0
 0:00:01 |
 
-|*  4 |     TABLE ACCESS FULL| CUSTOMER | 30000 |   468K|       |   935   (1)| 0
+|*  4 |     TABLE ACCESS FULL| CUSTOMER | 30000 |   410K|       |   935   (1)| 0
 0:00:01 |
 
-|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    14M|       |  6542   (1)| 0
+|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    11M|       |  6542   (1)| 0
 0:00:01 |
 
-|*  6 |    TABLE ACCESS FULL | LINEITEM |  3225K|    58M|       | 29516   (1)| 0
+|*  6 |    TABLE ACCESS FULL | LINEITEM |  3486K|    63M|       | 29516   (1)| 0
 0:00:02 |
 
 --------------------------------------------------------------------------------
@@ -52,87 +52,14 @@ Predicate Information (identified by operation id):
 Note
 -----
    - dynamic statistics used: dynamic sampling (level=2)
-   - 1 Sql Plan Directive used for this statement
+   - 5 Sql Plan Directives used for this statement
 
 
 Statistics
 ----------------------------------------------------------
-         76  recursive calls
-         10  db block gets
-     230337  consistent gets
-          0  physical reads
-       1392  redo size
-     446295  bytes sent via SQL*Net to client
-       9066  bytes received via SQL*Net from client
-        776  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-      11620  rows processed
-
-
-
-Elapsed: 00:00:02.19
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 2785378426
-
---------------------------------------------------------------------------------
----------
-
-| Id  | Operation            | Name     | Rows  | Bytes |TempSpc| Cost (%CPU)| T
-ime     |
-
---------------------------------------------------------------------------------
----------
-
-|   0 | SELECT STATEMENT     |          | 11620 |   635K|       | 42266   (1)| 0
-0:00:02 |
-
-|   1 |  HASH GROUP BY       |          | 11620 |   635K|       | 42266   (1)| 0
-0:00:02 |
-
-|*  2 |   HASH JOIN          |          |   489K|    26M|    10M| 42250   (1)| 0
-0:00:02 |
-
-|*  3 |    HASH JOIN         |          |   217K|  7847K|       |  7480   (1)| 0
-0:00:01 |
-
-|*  4 |     TABLE ACCESS FULL| CUSTOMER | 30000 |   468K|       |   935   (1)| 0
-0:00:01 |
-
-|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    14M|       |  6542   (1)| 0
-0:00:01 |
-
-|*  6 |    TABLE ACCESS FULL | LINEITEM |  3225K|    58M|       | 29516   (1)| 0
-0:00:02 |
-
---------------------------------------------------------------------------------
----------
-
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   2 - access("L_ORDERKEY"="O_ORDERKEY")
-   3 - access("C_CUSTKEY"="O_CUSTKEY")
-   4 - filter("C_MKTSEGMENT"='BUILDING')
-   5 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd
-              hh24:mi:ss'))
-   6 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd
-              hh24:mi:ss'))
-
-Note
------
-   - dynamic statistics used: dynamic sampling (level=2)
-   - 1 Sql Plan Directive used for this statement
-
-
-Statistics
-----------------------------------------------------------
-          8  recursive calls
+         17  recursive calls
           0  db block gets
-     136088  consistent gets
+     162814  consistent gets
           0  physical reads
         284  redo size
      446335  bytes sent via SQL*Net to client
@@ -144,11 +71,11 @@ Statistics
 
 
 
-Elapsed: 00:00:02.24
+Elapsed: 00:00:02.11
 
 Execution Plan
 ----------------------------------------------------------
-Plan hash value: 2785378426
+Plan hash value: 1963889666
 
 --------------------------------------------------------------------------------
 ---------
@@ -159,25 +86,25 @@ ime     |
 --------------------------------------------------------------------------------
 ---------
 
-|   0 | SELECT STATEMENT     |          | 11620 |   635K|       | 42266   (1)| 0
+|   0 | SELECT STATEMENT     |          | 52596 |  2568K|       | 43782   (1)| 0
 0:00:02 |
 
-|   1 |  HASH GROUP BY       |          | 11620 |   635K|       | 42266   (1)| 0
+|   1 |  HASH GROUP BY       |          | 52596 |  2568K|  3104K| 43782   (1)| 0
 0:00:02 |
 
-|*  2 |   HASH JOIN          |          |   489K|    26M|    10M| 42250   (1)| 0
+|*  2 |   HASH JOIN          |          | 52596 |  2568K|       | 43132   (1)| 0
 0:00:02 |
 
-|*  3 |    HASH JOIN         |          |   217K|  7847K|       |  7480   (1)| 0
+|*  3 |    TABLE ACCESS FULL | CUSTOMER | 30000 |   410K|       |   935   (1)| 0
 0:00:01 |
 
-|*  4 |     TABLE ACCESS FULL| CUSTOMER | 30000 |   468K|       |   935   (1)| 0
+|*  4 |    HASH JOIN         |          |   175K|  6163K|    20M| 42196   (1)| 0
+0:00:02 |
+
+|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    11M|       |  6542   (1)| 0
 0:00:01 |
 
-|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    14M|       |  6542   (1)| 0
-0:00:01 |
-
-|*  6 |    TABLE ACCESS FULL | LINEITEM |  3225K|    58M|       | 29516   (1)| 0
+|*  6 |     TABLE ACCESS FULL| LINEITEM |  3486K|    63M|       | 29516   (1)| 0
 0:00:02 |
 
 --------------------------------------------------------------------------------
@@ -187,9 +114,9 @@ ime     |
 Predicate Information (identified by operation id):
 ---------------------------------------------------
 
-   2 - access("L_ORDERKEY"="O_ORDERKEY")
-   3 - access("C_CUSTKEY"="O_CUSTKEY")
-   4 - filter("C_MKTSEGMENT"='BUILDING')
+   2 - access("C_CUSTKEY"="O_CUSTKEY")
+   3 - filter("C_MKTSEGMENT"='BUILDING')
+   4 - access("L_ORDERKEY"="O_ORDERKEY")
    5 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd
               hh24:mi:ss'))
    6 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd
@@ -198,7 +125,7 @@ Predicate Information (identified by operation id):
 Note
 -----
    - dynamic statistics used: dynamic sampling (level=2)
-   - 1 Sql Plan Directive used for this statement
+   - 4 Sql Plan Directives used for this statement
 
 
 Statistics
@@ -210,6 +137,79 @@ Statistics
         284  redo size
      446335  bytes sent via SQL*Net to client
        9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:02.15
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2785378426
+
+--------------------------------------------------------------------------------
+---------
+
+| Id  | Operation            | Name     | Rows  | Bytes |TempSpc| Cost (%CPU)| T
+ime     |
+
+--------------------------------------------------------------------------------
+---------
+
+|   0 | SELECT STATEMENT     |          | 11620 |   567K|       | 42593   (1)| 0
+0:00:02 |
+
+|   1 |  HASH GROUP BY       |          | 11620 |   567K|       | 42593   (1)| 0
+0:00:02 |
+
+|*  2 |   HASH JOIN          |          |   524K|    25M|  9192K| 42576   (1)| 0
+0:00:02 |
+
+|*  3 |    HASH JOIN         |          |   218K|  6622K|       |  7480   (1)| 0
+0:00:01 |
+
+|*  4 |     TABLE ACCESS FULL| CUSTOMER | 30000 |   410K|       |   935   (1)| 0
+0:00:01 |
+
+|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    11M|       |  6542   (1)| 0
+0:00:01 |
+
+|*  6 |    TABLE ACCESS FULL | LINEITEM |  3486K|    63M|       | 29516   (1)| 0
+0:00:02 |
+
+--------------------------------------------------------------------------------
+---------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("L_ORDERKEY"="O_ORDERKEY")
+   3 - access("C_CUSTKEY"="O_CUSTKEY")
+   4 - filter("C_MKTSEGMENT"='BUILDING')
+   5 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+   6 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 5 Sql Plan Directives used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     136083  consistent gets
+          0  physical reads
+        284  redo size
+     446335  bytes sent via SQL*Net to client
+       9065  bytes received via SQL*Net from client
         776  SQL*Net roundtrips to/from client
           0  sorts (memory)
           0  sorts (disk)
@@ -221,7 +221,7 @@ Elapsed: 00:00:01.93
 
 Execution Plan
 ----------------------------------------------------------
-Plan hash value: 2785378426
+Plan hash value: 1963889666
 
 --------------------------------------------------------------------------------
 ---------
@@ -232,25 +232,25 @@ ime     |
 --------------------------------------------------------------------------------
 ---------
 
-|   0 | SELECT STATEMENT     |          | 11620 |   635K|       | 42266   (1)| 0
+|   0 | SELECT STATEMENT     |          | 52596 |  2568K|       | 43782   (1)| 0
 0:00:02 |
 
-|   1 |  HASH GROUP BY       |          | 11620 |   635K|       | 42266   (1)| 0
+|   1 |  HASH GROUP BY       |          | 52596 |  2568K|  3104K| 43782   (1)| 0
 0:00:02 |
 
-|*  2 |   HASH JOIN          |          |   489K|    26M|    10M| 42250   (1)| 0
+|*  2 |   HASH JOIN          |          | 52596 |  2568K|       | 43132   (1)| 0
 0:00:02 |
 
-|*  3 |    HASH JOIN         |          |   217K|  7847K|       |  7480   (1)| 0
+|*  3 |    TABLE ACCESS FULL | CUSTOMER | 30000 |   410K|       |   935   (1)| 0
 0:00:01 |
 
-|*  4 |     TABLE ACCESS FULL| CUSTOMER | 30000 |   468K|       |   935   (1)| 0
+|*  4 |    HASH JOIN         |          |   175K|  6163K|    20M| 42196   (1)| 0
+0:00:02 |
+
+|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    11M|       |  6542   (1)| 0
 0:00:01 |
 
-|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    14M|       |  6542   (1)| 0
-0:00:01 |
-
-|*  6 |    TABLE ACCESS FULL | LINEITEM |  3225K|    58M|       | 29516   (1)| 0
+|*  6 |     TABLE ACCESS FULL| LINEITEM |  3486K|    63M|       | 29516   (1)| 0
 0:00:02 |
 
 --------------------------------------------------------------------------------
@@ -260,9 +260,9 @@ ime     |
 Predicate Information (identified by operation id):
 ---------------------------------------------------
 
-   2 - access("L_ORDERKEY"="O_ORDERKEY")
-   3 - access("C_CUSTKEY"="O_CUSTKEY")
-   4 - filter("C_MKTSEGMENT"='BUILDING')
+   2 - access("C_CUSTKEY"="O_CUSTKEY")
+   3 - filter("C_MKTSEGMENT"='BUILDING')
+   4 - access("L_ORDERKEY"="O_ORDERKEY")
    5 - filter("O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd
               hh24:mi:ss'))
    6 - filter("L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00', 'syyyy-mm-dd
@@ -271,7 +271,7 @@ Predicate Information (identified by operation id):
 Note
 -----
    - dynamic statistics used: dynamic sampling (level=2)
-   - 1 Sql Plan Directive used for this statement
+   - 4 Sql Plan Directives used for this statement
 
 
 Statistics
@@ -290,7 +290,7 @@ Statistics
 
 
 
-Elapsed: 00:00:02.01
+Elapsed: 00:00:02.10
 
 Execution Plan
 ----------------------------------------------------------
@@ -305,25 +305,25 @@ ime     |
 --------------------------------------------------------------------------------
 ---------
 
-|   0 | SELECT STATEMENT     |          | 11620 |   635K|       | 42266   (1)| 0
+|   0 | SELECT STATEMENT     |          | 11620 |   567K|       | 42593   (1)| 0
 0:00:02 |
 
-|   1 |  HASH GROUP BY       |          | 11620 |   635K|       | 42266   (1)| 0
+|   1 |  HASH GROUP BY       |          | 11620 |   567K|       | 42593   (1)| 0
 0:00:02 |
 
-|*  2 |   HASH JOIN          |          |   489K|    26M|    10M| 42250   (1)| 0
+|*  2 |   HASH JOIN          |          |   524K|    25M|  9192K| 42576   (1)| 0
 0:00:02 |
 
-|*  3 |    HASH JOIN         |          |   217K|  7847K|       |  7480   (1)| 0
+|*  3 |    HASH JOIN         |          |   218K|  6622K|       |  7480   (1)| 0
 0:00:01 |
 
-|*  4 |     TABLE ACCESS FULL| CUSTOMER | 30000 |   468K|       |   935   (1)| 0
+|*  4 |     TABLE ACCESS FULL| CUSTOMER | 30000 |   410K|       |   935   (1)| 0
 0:00:01 |
 
-|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    14M|       |  6542   (1)| 0
+|*  5 |     TABLE ACCESS FULL| ORDERS   |   729K|    11M|       |  6542   (1)| 0
 0:00:01 |
 
-|*  6 |    TABLE ACCESS FULL | LINEITEM |  3225K|    58M|       | 29516   (1)| 0
+|*  6 |    TABLE ACCESS FULL | LINEITEM |  3486K|    63M|       | 29516   (1)| 0
 0:00:02 |
 
 --------------------------------------------------------------------------------
@@ -344,7 +344,7 @@ Predicate Information (identified by operation id):
 Note
 -----
    - dynamic statistics used: dynamic sampling (level=2)
-   - 1 Sql Plan Directive used for this statement
+   - 5 Sql Plan Directives used for this statement
 
 
 Statistics

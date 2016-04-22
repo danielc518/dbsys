@@ -1,3 +1,78 @@
+Elapsed: 00:00:01.30
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2698183184
+
+--------------------------------------------------------------------------------
+----------------------------------
+
+| Id  | Operation                | Name     | Rows  | Bytes | Cost (%CPU)| Time
+    |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+----------------------------------
+
+|   0 | SELECT STATEMENT         |          |     3 |   267 |  8263   (2)| 00:00
+:01 |        |      |            |
+
+|   1 |  PX COORDINATOR          |          |       |       |            |
+    |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)    | :TQ10001 |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY         |          |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE           |          |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH        | :TQ10000 |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY      |          |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR |          |  6387K|   408M|  8203   (1)| 00:00
+:01 |  Q1,00 | PCWC |            |
+
+|*  8 |         TABLE ACCESS FULL| LINEITEM |  6387K|   408M|  8203   (1)| 00:00
+:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+----------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   8 - filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     108828  consistent gets
+     108549  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
 Elapsed: 00:00:01.32
 
 Execution Plan
@@ -61,234 +136,9 @@ Statistics
 ----------------------------------------------------------
          24  recursive calls
           0  db block gets
-     109638  consistent gets
-          0  physical reads
-        408  redo size
-       1694  bytes sent via SQL*Net to client
-        551  bytes received via SQL*Net from client
-          2  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-          4  rows processed
-
-
-
-Elapsed: 00:00:01.44
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 2698183184
-
---------------------------------------------------------------------------------
-----------------------------------
-
-| Id  | Operation                | Name     | Rows  | Bytes | Cost (%CPU)| Time
-    |    TQ  |IN-OUT| PQ Distrib |
-
---------------------------------------------------------------------------------
-----------------------------------
-
-|   0 | SELECT STATEMENT         |          |     3 |   267 |  8263   (2)| 00:00
-:01 |        |      |            |
-
-|   1 |  PX COORDINATOR          |          |       |       |            |
-    |        |      |            |
-
-|   2 |   PX SEND QC (RANDOM)    | :TQ10001 |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,01 | P->S | QC (RAND)  |
-
-|   3 |    HASH GROUP BY         |          |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,01 | PCWP |            |
-
-|   4 |     PX RECEIVE           |          |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,01 | PCWP |            |
-
-|   5 |      PX SEND HASH        | :TQ10000 |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,00 | P->P | HASH       |
-
-|   6 |       HASH GROUP BY      |          |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,00 | PCWP |            |
-
-|   7 |        PX BLOCK ITERATOR |          |  6387K|   408M|  8203   (1)| 00:00
-:01 |  Q1,00 | PCWC |            |
-
-|*  8 |         TABLE ACCESS FULL| LINEITEM |  6387K|   408M|  8203   (1)| 00:00
-:01 |  Q1,00 | PCWP |            |
-
---------------------------------------------------------------------------------
-----------------------------------
-
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   8 - filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
-:ss'))
-
-
-Note
------
-   - dynamic statistics used: dynamic sampling (level=AUTO)
-   - Degree of Parallelism is 4 because of table property
-
-
-Statistics
-----------------------------------------------------------
-         24  recursive calls
-          0  db block gets
-     109638  consistent gets
-          0  physical reads
-        408  redo size
-       1694  bytes sent via SQL*Net to client
-        551  bytes received via SQL*Net from client
-          2  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-          4  rows processed
-
-
-
-Elapsed: 00:00:01.23
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 2698183184
-
---------------------------------------------------------------------------------
-----------------------------------
-
-| Id  | Operation                | Name     | Rows  | Bytes | Cost (%CPU)| Time
-    |    TQ  |IN-OUT| PQ Distrib |
-
---------------------------------------------------------------------------------
-----------------------------------
-
-|   0 | SELECT STATEMENT         |          |     3 |   267 |  8263   (2)| 00:00
-:01 |        |      |            |
-
-|   1 |  PX COORDINATOR          |          |       |       |            |
-    |        |      |            |
-
-|   2 |   PX SEND QC (RANDOM)    | :TQ10001 |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,01 | P->S | QC (RAND)  |
-
-|   3 |    HASH GROUP BY         |          |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,01 | PCWP |            |
-
-|   4 |     PX RECEIVE           |          |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,01 | PCWP |            |
-
-|   5 |      PX SEND HASH        | :TQ10000 |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,00 | P->P | HASH       |
-
-|   6 |       HASH GROUP BY      |          |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,00 | PCWP |            |
-
-|   7 |        PX BLOCK ITERATOR |          |  6387K|   408M|  8203   (1)| 00:00
-:01 |  Q1,00 | PCWC |            |
-
-|*  8 |         TABLE ACCESS FULL| LINEITEM |  6387K|   408M|  8203   (1)| 00:00
-:01 |  Q1,00 | PCWP |            |
-
---------------------------------------------------------------------------------
-----------------------------------
-
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   8 - filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
-:ss'))
-
-
-Note
------
-   - dynamic statistics used: dynamic sampling (level=AUTO)
-   - Degree of Parallelism is 4 because of table property
-
-
-Statistics
-----------------------------------------------------------
-         24  recursive calls
-          0  db block gets
-     109638  consistent gets
-          0  physical reads
-        364  redo size
-       1694  bytes sent via SQL*Net to client
-        552  bytes received via SQL*Net from client
-          2  SQL*Net roundtrips to/from client
-          0  sorts (memory)
-          0  sorts (disk)
-          4  rows processed
-
-
-
-Elapsed: 00:00:01.34
-
-Execution Plan
-----------------------------------------------------------
-Plan hash value: 2698183184
-
---------------------------------------------------------------------------------
-----------------------------------
-
-| Id  | Operation                | Name     | Rows  | Bytes | Cost (%CPU)| Time
-    |    TQ  |IN-OUT| PQ Distrib |
-
---------------------------------------------------------------------------------
-----------------------------------
-
-|   0 | SELECT STATEMENT         |          |     3 |   267 |  8263   (2)| 00:00
-:01 |        |      |            |
-
-|   1 |  PX COORDINATOR          |          |       |       |            |
-    |        |      |            |
-
-|   2 |   PX SEND QC (RANDOM)    | :TQ10001 |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,01 | P->S | QC (RAND)  |
-
-|   3 |    HASH GROUP BY         |          |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,01 | PCWP |            |
-
-|   4 |     PX RECEIVE           |          |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,01 | PCWP |            |
-
-|   5 |      PX SEND HASH        | :TQ10000 |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,00 | P->P | HASH       |
-
-|   6 |       HASH GROUP BY      |          |     3 |   267 |  8263   (2)| 00:00
-:01 |  Q1,00 | PCWP |            |
-
-|   7 |        PX BLOCK ITERATOR |          |  6387K|   408M|  8203   (1)| 00:00
-:01 |  Q1,00 | PCWC |            |
-
-|*  8 |         TABLE ACCESS FULL| LINEITEM |  6387K|   408M|  8203   (1)| 00:00
-:01 |  Q1,00 | PCWP |            |
-
---------------------------------------------------------------------------------
-----------------------------------
-
-
-Predicate Information (identified by operation id):
----------------------------------------------------
-
-   8 - filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
-:ss'))
-
-
-Note
------
-   - dynamic statistics used: dynamic sampling (level=AUTO)
-   - Degree of Parallelism is 4 because of table property
-
-
-Statistics
-----------------------------------------------------------
-         24  recursive calls
-          0  db block gets
-     109638  consistent gets
-          0  physical reads
-        408  redo size
+     108828  consistent gets
+     108549  physical reads
+          0  redo size
        1696  bytes sent via SQL*Net to client
         552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client
@@ -298,7 +148,7 @@ Statistics
 
 
 
-Elapsed: 00:00:01.22
+Elapsed: 00:00:01.35
 
 Execution Plan
 ----------------------------------------------------------
@@ -361,12 +211,162 @@ Statistics
 ----------------------------------------------------------
          24  recursive calls
           0  db block gets
-     109638  consistent gets
-          0  physical reads
-        408  redo size
+     108828  consistent gets
+     108549  physical reads
+          0  redo size
+       1696  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+Elapsed: 00:00:01.31
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2698183184
+
+--------------------------------------------------------------------------------
+----------------------------------
+
+| Id  | Operation                | Name     | Rows  | Bytes | Cost (%CPU)| Time
+    |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+----------------------------------
+
+|   0 | SELECT STATEMENT         |          |     3 |   267 |  8263   (2)| 00:00
+:01 |        |      |            |
+
+|   1 |  PX COORDINATOR          |          |       |       |            |
+    |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)    | :TQ10001 |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY         |          |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE           |          |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH        | :TQ10000 |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY      |          |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR |          |  6387K|   408M|  8203   (1)| 00:00
+:01 |  Q1,00 | PCWC |            |
+
+|*  8 |         TABLE ACCESS FULL| LINEITEM |  6387K|   408M|  8203   (1)| 00:00
+:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+----------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   8 - filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     108828  consistent gets
+     108549  physical reads
+          0  redo size
        1694  bytes sent via SQL*Net to client
         552  bytes received via SQL*Net from client
           2  SQL*Net roundtrips to/from client
           0  sorts (memory)
           0  sorts (disk)
           4  rows processed
+
+
+
+Elapsed: 00:00:01.31
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2698183184
+
+--------------------------------------------------------------------------------
+----------------------------------
+
+| Id  | Operation                | Name     | Rows  | Bytes | Cost (%CPU)| Time
+    |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+----------------------------------
+
+|   0 | SELECT STATEMENT         |          |     3 |   267 |  8263   (2)| 00:00
+:01 |        |      |            |
+
+|   1 |  PX COORDINATOR          |          |       |       |            |
+    |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)    | :TQ10001 |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY         |          |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE           |          |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH        | :TQ10000 |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY      |          |     3 |   267 |  8263   (2)| 00:00
+:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR |          |  6387K|   408M|  8203   (1)| 00:00
+:01 |  Q1,00 | PCWC |            |
+
+|*  8 |         TABLE ACCESS FULL| LINEITEM |  6387K|   408M|  8203   (1)| 00:00
+:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+----------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   8 - filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     108828  consistent gets
+     108549  physical reads
+          0  redo size
+       1696  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
