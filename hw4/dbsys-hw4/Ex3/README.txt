@@ -1,6 +1,6 @@
 List of performance optimizations:
 
-* Create materialized views as in exercise 2 (see dbsys-hw4/views.txt)
+* Create materialized views as in exercise 2 (see dbsys-hw4/Ex2/views.txt)
 
 -- Materialized Views --
 
@@ -50,4 +50,23 @@ List of performance optimizations:
 * analyze table supplier compute statistics;
 * analyze table nation compute statistics;
 * analyze table region compute statistics;
+
+--------------------------------------------------------------------------------------------------------------------
+
+We left out indexes since exercise 2 showed that these were not helpful for our particular queries.
+Otherwise, we kept everything we did in exercise 2 and, in addition, computed statistics for the views
+and turned the views into in-memory access.
+
+In exercise 2, we saw that every query benefited from at least one tuning option. Hence, by combining
+all these tuning options, we were able to drop the running time significantly.
+
+Main beneficial factors for each query:
+Query 1: Parallel access of lineitem.
+Query 3: Pre-joined view involving lineitem, orders, and customer.
+Query 5: Pre-joined view involving customer, orders, lineitem, supplier, nation, region.
+Query 6: Pre-filtered view of lineitem.
+Query 18: Subquery view involving orders and lineitem.
+Query 22: Subquery view involving orders and customer.
+
+Apart from these factors, the in-memory + parallel access to these pre-computed views were greatly helpful as well.
 
