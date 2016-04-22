@@ -30,6 +30,13 @@ List of performance optimizations:
 
 -- Original Tables --
 
+* alter table lineitem parallel 4;
+* alter table orders parallel 4;
+* alter table customer parallel 4;
+* alter table supplier parallel 4;
+* alter table nation parallel 4;
+* alter table region parallel 4;
+
 * alter table lineitem inmemory; 
 * alter table orders inmemory;
 * alter table customer inmemory;
