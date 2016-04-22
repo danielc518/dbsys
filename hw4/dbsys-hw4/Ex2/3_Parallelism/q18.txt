@@ -1,0 +1,778 @@
+Elapsed: 00:00:03.36
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2907300558
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+| Id  | Operation                                 | Name     | Rows  | Bytes | C
+ost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+|   0 | SELECT STATEMENT                          |          |   180 | 15840 | 2
+4028   (2)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                           |          |       |       |
+          |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                     | :TQ10007 |   180 | 15840 | 2
+4028   (2)| 00:00:01 |  Q1,07 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                          |          |   180 | 15840 | 2
+4028   (2)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   4 |     PX RECEIVE                            |          |   180 | 15840 | 2
+4028   (2)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   5 |      PX SEND HASH                         | :TQ10006 |   180 | 15840 | 2
+4028   (2)| 00:00:01 |  Q1,06 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                       |          |   180 | 15840 | 2
+4028   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|*  7 |        HASH JOIN                          |          |   180 | 15840 | 2
+4027   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   8 |         PX RECEIVE                        |          |    30 |  1860 | 1
+5832   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   9 |          PX SEND BROADCAST                | :TQ10005 |    30 |  1860 | 1
+5832   (2)| 00:00:01 |  Q1,05 | P->P | BROADCAST  |
+
+|* 10 |           HASH JOIN BUFFERED              |          |    30 |  1860 | 1
+5832   (2)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  11 |            PX RECEIVE                     |          |    30 |  1140 | 1
+4899   (2)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  12 |             PX SEND HYBRID HASH           | :TQ10003 |    30 |  1140 | 1
+4899   (2)| 00:00:01 |  Q1,03 | P->P | HYBRID HASH|
+
+|  13 |              STATISTICS COLLECTOR         |          |       |       |
+          |          |  Q1,03 | PCWC |            |
+
+|* 14 |               HASH JOIN BUFFERED          |          |    30 |  1140 | 1
+4899   (2)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  15 |                PX RECEIVE                 |          |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  16 |                 PX SEND HYBRID HASH       | :TQ10001 |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,01 | P->P | HYBRID HASH|
+
+|  17 |                  STATISTICS COLLECTOR     |          |       |       |
+          |          |  Q1,01 | PCWC |            |
+
+|  18 |                   VIEW                    | VW_NSO_1 |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|* 19 |                    FILTER                 |          |       |       |
+          |          |  Q1,01 | PCWC |            |
+
+|  20 |                     HASH GROUP BY         |          |    57 |   219M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  21 |                      PX RECEIVE           |          |    57 |   219M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  22 |                       PX SEND HASH        | :TQ10000 |    57 |   219M|
+8273   (2)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  23 |                        HASH GROUP BY      |          |    57 |   219M|
+8273   (2)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  24 |                         PX BLOCK ITERATOR |          |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  25 |                          TABLE ACCESS FULL| LINEITEM |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  26 |                PX RECEIVE                 |          |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  27 |                 PX SEND HYBRID HASH       | :TQ10002 |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,02 | S->P | HYBRID HASH|
+
+|  28 |                  PX SELECTOR              |          |       |       |
+          |          |  Q1,02 | SCWC |            |
+
+|  29 |                   TABLE ACCESS FULL       | ORDERS   |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,02 | SCWP |            |
+
+|  30 |            PX RECEIVE                     |          |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  31 |             PX SEND HYBRID HASH           | :TQ10004 |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,04 | S->P | HYBRID HASH|
+
+|  32 |              PX SELECTOR                  |          |       |       |
+          |          |  Q1,04 | SCWC |            |
+
+|  33 |               TABLE ACCESS FULL           | CUSTOMER |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,04 | SCWP |            |
+
+|  34 |         PX BLOCK ITERATOR                 |          |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,06 | PCWC |            |
+
+|  35 |          TABLE ACCESS FULL                | LINEITEM |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,06 | PCWP |            |
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("O_ORDERKEY"="L_ORDERKEY")
+  10 - access("C_CUSTKEY"="O_CUSTKEY")
+  14 - access("O_ORDERKEY"="L_ORDERKEY")
+  19 - filter(SUM(SYS_OP_CSR(SYS_OP_MSR(SUM("L_QUANTITY")),0))>300)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         67  recursive calls
+          0  db block gets
+     361324  consistent gets
+          0  physical reads
+        764  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:03.62
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 177671366
+
+--------------------------------------------------------------------------------
+----------------------------------------------------
+
+| Id  | Operation                                  | Name     | Rows  | Bytes |
+Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+----------------------------------------------------
+
+|   0 | SELECT STATEMENT                           |          |   347 | 30536 |
+23942   (1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                            |          |       |       |
+           |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                      | :TQ10007 |   347 | 30536 |
+23942   (1)| 00:00:01 |  Q1,07 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                           |          |   347 | 30536 |
+23942   (1)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   4 |     PX RECEIVE                             |          |   347 | 30536 |
+23942   (1)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   5 |      PX SEND HASH                          | :TQ10006 |   347 | 30536 |
+23942   (1)| 00:00:01 |  Q1,06 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                        |          |   347 | 30536 |
+23942   (1)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|*  7 |        HASH JOIN                           |          |   347 | 30536 |
+23941   (1)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   8 |         PX RECEIVE                         |          |    58 |  3596 |
+15745   (1)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   9 |          PX SEND BROADCAST                 | :TQ10005 |    58 |  3596 |
+15745   (1)| 00:00:01 |  Q1,05 | P->P | BROADCAST  |
+
+|* 10 |           HASH JOIN BUFFERED               |          |    58 |  3596 |
+15745   (1)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  11 |            PX RECEIVE                      |          |    58 |  2204 |
+14812   (1)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  12 |             PX SEND HYBRID HASH            | :TQ10003 |    58 |  2204 |
+14812   (1)| 00:00:01 |  Q1,03 | P->P | HYBRID HASH|
+
+|  13 |              STATISTICS COLLECTOR          |          |       |       |
+           |          |  Q1,03 | PCWC |            |
+
+|* 14 |               HASH JOIN RIGHT SEMI BUFFERED|          |    58 |  2204 |
+14812   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  15 |                PX RECEIVE                  |          |    57 |   741 |
+ 8273   (2)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  16 |                 PX SEND HASH               | :TQ10001 |    57 |   741 |
+ 8273   (2)| 00:00:01 |  Q1,01 | P->P | HASH       |
+
+|  17 |                  VIEW                      | VW_NSO_1 |    57 |   741 |
+ 8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|* 18 |                   FILTER                   |          |       |       |
+           |          |  Q1,01 | PCWC |            |
+
+|  19 |                    HASH GROUP BY           |          |     1 |  1482 |
+ 8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  20 |                     PX RECEIVE             |          |     1 |  1482 |
+ 8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  21 |                      PX SEND HASH          | :TQ10000 |     1 |  1482 |
+ 8273   (2)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  22 |                       HASH GROUP BY        |          |     1 |  1482 |
+ 8273   (2)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  23 |                        PX BLOCK ITERATOR   |          |  8866K|   219M|
+ 8187   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  24 |                         TABLE ACCESS FULL  | LINEITEM |  8866K|   219M|
+ 8187   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  25 |                PX RECEIVE                  |          |  1500K|    35M|
+ 6538   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  26 |                 PX SEND HASH               | :TQ10002 |  1500K|    35M|
+ 6538   (1)| 00:00:01 |  Q1,02 | S->P | HASH       |
+
+|  27 |                  PX SELECTOR               |          |       |       |
+           |          |  Q1,02 | SCWC |            |
+
+|  28 |                   TABLE ACCESS FULL        | ORDERS   |  1500K|    35M|
+ 6538   (1)| 00:00:01 |  Q1,02 | SCWP |            |
+
+|  29 |            PX RECEIVE                      |          |   150K|  3515K|
+  933   (1)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  30 |             PX SEND HYBRID HASH            | :TQ10004 |   150K|  3515K|
+  933   (1)| 00:00:01 |  Q1,04 | S->P | HYBRID HASH|
+
+|  31 |              PX SELECTOR                   |          |       |       |
+           |          |  Q1,04 | SCWC |            |
+
+|  32 |               TABLE ACCESS FULL            | CUSTOMER |   150K|  3515K|
+  933   (1)| 00:00:01 |  Q1,04 | SCWP |            |
+
+|  33 |         PX BLOCK ITERATOR                  |          |  8866K|   219M|
+ 8187   (1)| 00:00:01 |  Q1,06 | PCWC |            |
+
+|  34 |          TABLE ACCESS FULL                 | LINEITEM |  8866K|   219M|
+ 8187   (1)| 00:00:01 |  Q1,06 | PCWP |            |
+
+--------------------------------------------------------------------------------
+----------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("O_ORDERKEY"="L_ORDERKEY")
+  10 - access("C_CUSTKEY"="O_CUSTKEY")
+  14 - access("O_ORDERKEY"="L_ORDERKEY")
+  18 - filter(SUM(SYS_OP_CSR(SYS_OP_MSR(SUM("L_QUANTITY")),0))>300)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         63  recursive calls
+          0  db block gets
+     361324  consistent gets
+          0  physical reads
+        808  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+Elapsed: 00:00:03.51
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2907300558
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+| Id  | Operation                                 | Name     | Rows  | Bytes | C
+ost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+|   0 | SELECT STATEMENT                          |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                           |          |       |       |
+          |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                     | :TQ10007 |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,07 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                          |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   4 |     PX RECEIVE                            |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   5 |      PX SEND HASH                         | :TQ10006 |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,06 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                       |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|*  7 |        HASH JOIN                          |          |     6 |   528 | 2
+4027   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   8 |         PX RECEIVE                        |          |     1 |    62 | 1
+5832   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   9 |          PX SEND BROADCAST                | :TQ10005 |     1 |    62 | 1
+5832   (2)| 00:00:01 |  Q1,05 | P->P | BROADCAST  |
+
+|* 10 |           HASH JOIN BUFFERED              |          |     1 |    62 | 1
+5832   (2)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  11 |            PX RECEIVE                     |          |     1 |    38 | 1
+4899   (2)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  12 |             PX SEND HYBRID HASH           | :TQ10003 |     1 |    38 | 1
+4899   (2)| 00:00:01 |  Q1,03 | P->P | HYBRID HASH|
+
+|  13 |              STATISTICS COLLECTOR         |          |       |       |
+          |          |  Q1,03 | PCWC |            |
+
+|* 14 |               HASH JOIN BUFFERED          |          |     1 |    38 | 1
+4899   (2)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  15 |                PX RECEIVE                 |          |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  16 |                 PX SEND HYBRID HASH       | :TQ10001 |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,01 | P->P | HYBRID HASH|
+
+|  17 |                  STATISTICS COLLECTOR     |          |       |       |
+          |          |  Q1,01 | PCWC |            |
+
+|  18 |                   VIEW                    | VW_NSO_1 |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|* 19 |                    FILTER                 |          |       |       |
+          |          |  Q1,01 | PCWC |            |
+
+|  20 |                     HASH GROUP BY         |          |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  21 |                      PX RECEIVE           |          |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  22 |                       PX SEND HASH        | :TQ10000 |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  23 |                        HASH GROUP BY      |          |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  24 |                         PX BLOCK ITERATOR |          |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  25 |                          TABLE ACCESS FULL| LINEITEM |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  26 |                PX RECEIVE                 |          |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  27 |                 PX SEND HYBRID HASH       | :TQ10002 |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,02 | S->P | HYBRID HASH|
+
+|  28 |                  PX SELECTOR              |          |       |       |
+          |          |  Q1,02 | SCWC |            |
+
+|  29 |                   TABLE ACCESS FULL       | ORDERS   |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,02 | SCWP |            |
+
+|  30 |            PX RECEIVE                     |          |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  31 |             PX SEND HYBRID HASH           | :TQ10004 |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,04 | S->P | HYBRID HASH|
+
+|  32 |              PX SELECTOR                  |          |       |       |
+          |          |  Q1,04 | SCWC |            |
+
+|  33 |               TABLE ACCESS FULL           | CUSTOMER |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,04 | SCWP |            |
+
+|  34 |         PX BLOCK ITERATOR                 |          |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,06 | PCWC |            |
+
+|  35 |          TABLE ACCESS FULL                | LINEITEM |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,06 | PCWP |            |
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("O_ORDERKEY"="L_ORDERKEY")
+  10 - access("C_CUSTKEY"="O_CUSTKEY")
+  14 - access("O_ORDERKEY"="L_ORDERKEY")
+  19 - filter(SUM(SYS_OP_CSR(SYS_OP_MSR(SUM("L_QUANTITY")),0))>300)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         63  recursive calls
+          0  db block gets
+     361324  consistent gets
+          0  physical reads
+        808  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:01.42
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2907300558
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+| Id  | Operation                                 | Name     | Rows  | Bytes | C
+ost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+|   0 | SELECT STATEMENT                          |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                           |          |       |       |
+          |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                     | :TQ10007 |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,07 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                          |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   4 |     PX RECEIVE                            |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   5 |      PX SEND HASH                         | :TQ10006 |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,06 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                       |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|*  7 |        HASH JOIN                          |          |     6 |   528 | 2
+4027   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   8 |         PX RECEIVE                        |          |     1 |    62 | 1
+5832   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   9 |          PX SEND BROADCAST                | :TQ10005 |     1 |    62 | 1
+5832   (2)| 00:00:01 |  Q1,05 | P->P | BROADCAST  |
+
+|* 10 |           HASH JOIN BUFFERED              |          |     1 |    62 | 1
+5832   (2)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  11 |            PX RECEIVE                     |          |     1 |    38 | 1
+4899   (2)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  12 |             PX SEND HYBRID HASH           | :TQ10003 |     1 |    38 | 1
+4899   (2)| 00:00:01 |  Q1,03 | P->P | HYBRID HASH|
+
+|  13 |              STATISTICS COLLECTOR         |          |       |       |
+          |          |  Q1,03 | PCWC |            |
+
+|* 14 |               HASH JOIN BUFFERED          |          |     1 |    38 | 1
+4899   (2)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  15 |                PX RECEIVE                 |          |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  16 |                 PX SEND HYBRID HASH       | :TQ10001 |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,01 | P->P | HYBRID HASH|
+
+|  17 |                  STATISTICS COLLECTOR     |          |       |       |
+          |          |  Q1,01 | PCWC |            |
+
+|  18 |                   VIEW                    | VW_NSO_1 |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|* 19 |                    FILTER                 |          |       |       |
+          |          |  Q1,01 | PCWC |            |
+
+|  20 |                     HASH GROUP BY         |          |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  21 |                      PX RECEIVE           |          |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  22 |                       PX SEND HASH        | :TQ10000 |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  23 |                        HASH GROUP BY      |          |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  24 |                         PX BLOCK ITERATOR |          |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  25 |                          TABLE ACCESS FULL| LINEITEM |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  26 |                PX RECEIVE                 |          |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  27 |                 PX SEND HYBRID HASH       | :TQ10002 |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,02 | S->P | HYBRID HASH|
+
+|  28 |                  PX SELECTOR              |          |       |       |
+          |          |  Q1,02 | SCWC |            |
+
+|  29 |                   TABLE ACCESS FULL       | ORDERS   |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,02 | SCWP |            |
+
+|  30 |            PX RECEIVE                     |          |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  31 |             PX SEND HYBRID HASH           | :TQ10004 |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,04 | S->P | HYBRID HASH|
+
+|  32 |              PX SELECTOR                  |          |       |       |
+          |          |  Q1,04 | SCWC |            |
+
+|  33 |               TABLE ACCESS FULL           | CUSTOMER |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,04 | SCWP |            |
+
+|  34 |         PX BLOCK ITERATOR                 |          |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,06 | PCWC |            |
+
+|  35 |          TABLE ACCESS FULL                | LINEITEM |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,06 | PCWP |            |
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("O_ORDERKEY"="L_ORDERKEY")
+  10 - access("C_CUSTKEY"="O_CUSTKEY")
+  14 - access("O_ORDERKEY"="L_ORDERKEY")
+  19 - filter(SUM(SYS_OP_CSR(SYS_OP_MSR(SUM("L_QUANTITY")),0))>300)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     246785  consistent gets
+          0  physical reads
+        524  redo size
+       4371  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:01.39
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2907300558
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+| Id  | Operation                                 | Name     | Rows  | Bytes | C
+ost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+|   0 | SELECT STATEMENT                          |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                           |          |       |       |
+          |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                     | :TQ10007 |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,07 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                          |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   4 |     PX RECEIVE                            |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,07 | PCWP |            |
+
+|   5 |      PX SEND HASH                         | :TQ10006 |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,06 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                       |          |     6 |   528 | 2
+4028   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|*  7 |        HASH JOIN                          |          |     6 |   528 | 2
+4027   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   8 |         PX RECEIVE                        |          |     1 |    62 | 1
+5832   (2)| 00:00:01 |  Q1,06 | PCWP |            |
+
+|   9 |          PX SEND BROADCAST                | :TQ10005 |     1 |    62 | 1
+5832   (2)| 00:00:01 |  Q1,05 | P->P | BROADCAST  |
+
+|* 10 |           HASH JOIN BUFFERED              |          |     1 |    62 | 1
+5832   (2)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  11 |            PX RECEIVE                     |          |     1 |    38 | 1
+4899   (2)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  12 |             PX SEND HYBRID HASH           | :TQ10003 |     1 |    38 | 1
+4899   (2)| 00:00:01 |  Q1,03 | P->P | HYBRID HASH|
+
+|  13 |              STATISTICS COLLECTOR         |          |       |       |
+          |          |  Q1,03 | PCWC |            |
+
+|* 14 |               HASH JOIN BUFFERED          |          |     1 |    38 | 1
+4899   (2)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  15 |                PX RECEIVE                 |          |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  16 |                 PX SEND HYBRID HASH       | :TQ10001 |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,01 | P->P | HYBRID HASH|
+
+|  17 |                  STATISTICS COLLECTOR     |          |       |       |
+          |          |  Q1,01 | PCWC |            |
+
+|  18 |                   VIEW                    | VW_NSO_1 |  8866K|   109M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|* 19 |                    FILTER                 |          |       |       |
+          |          |  Q1,01 | PCWC |            |
+
+|  20 |                     HASH GROUP BY         |          |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  21 |                      PX RECEIVE           |          |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|  22 |                       PX SEND HASH        | :TQ10000 |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|  23 |                        HASH GROUP BY      |          |     1 |   219M|
+8273   (2)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  24 |                         PX BLOCK ITERATOR |          |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  25 |                          TABLE ACCESS FULL| LINEITEM |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|  26 |                PX RECEIVE                 |          |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,03 | PCWP |            |
+
+|  27 |                 PX SEND HYBRID HASH       | :TQ10002 |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,02 | S->P | HYBRID HASH|
+
+|  28 |                  PX SELECTOR              |          |       |       |
+          |          |  Q1,02 | SCWC |            |
+
+|  29 |                   TABLE ACCESS FULL       | ORDERS   |  1500K|    35M|
+6538   (1)| 00:00:01 |  Q1,02 | SCWP |            |
+
+|  30 |            PX RECEIVE                     |          |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,05 | PCWP |            |
+
+|  31 |             PX SEND HYBRID HASH           | :TQ10004 |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,04 | S->P | HYBRID HASH|
+
+|  32 |              PX SELECTOR                  |          |       |       |
+          |          |  Q1,04 | SCWC |            |
+
+|  33 |               TABLE ACCESS FULL           | CUSTOMER |   150K|  3515K|
+ 933   (1)| 00:00:01 |  Q1,04 | SCWP |            |
+
+|  34 |         PX BLOCK ITERATOR                 |          |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,06 | PCWC |            |
+
+|  35 |          TABLE ACCESS FULL                | LINEITEM |  8866K|   219M|
+8187   (1)| 00:00:01 |  Q1,06 | PCWP |            |
+
+--------------------------------------------------------------------------------
+---------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("O_ORDERKEY"="L_ORDERKEY")
+  10 - access("C_CUSTKEY"="O_CUSTKEY")
+  14 - access("O_ORDERKEY"="L_ORDERKEY")
+  19 - filter(SUM(SYS_OP_CSR(SYS_OP_MSR(SUM("L_QUANTITY")),0))>300)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     246785  consistent gets
+          0  physical reads
+        524  redo size
+       4371  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed

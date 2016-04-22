@@ -1,0 +1,297 @@
+Elapsed: 00:00:14.52
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 466087209
+
+--------------------------------------------------------------------------------
+--------------------------
+
+| Id  | Operation                            | Name              | Rows  | Bytes
+ | Cost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+|   0 | SELECT STATEMENT                     |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   1 |  HASH GROUP BY                       |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   2 |   TABLE ACCESS BY INDEX ROWID BATCHED| LINEITEM          |  5956K|   380
+M|  3913K  (1)| 00:02:33 |
+
+|*  3 |    INDEX RANGE SCAN                  | LINEITEM_SHIPDATE |  5916K|
+ | 10657   (1)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - access("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+    5780559  consistent gets
+          0  physical reads
+        124  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:14.40
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 466087209
+
+--------------------------------------------------------------------------------
+--------------------------
+
+| Id  | Operation                            | Name              | Rows  | Bytes
+ | Cost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+|   0 | SELECT STATEMENT                     |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   1 |  HASH GROUP BY                       |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   2 |   TABLE ACCESS BY INDEX ROWID BATCHED| LINEITEM          |  5956K|   380
+M|  3913K  (1)| 00:02:33 |
+
+|*  3 |    INDEX RANGE SCAN                  | LINEITEM_SHIPDATE |  5916K|
+ | 10657   (1)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - access("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+    5780559  consistent gets
+          0  physical reads
+        124  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:14.60
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 466087209
+
+--------------------------------------------------------------------------------
+--------------------------
+
+| Id  | Operation                            | Name              | Rows  | Bytes
+ | Cost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+|   0 | SELECT STATEMENT                     |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   1 |  HASH GROUP BY                       |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   2 |   TABLE ACCESS BY INDEX ROWID BATCHED| LINEITEM          |  5956K|   380
+M|  3913K  (1)| 00:02:33 |
+
+|*  3 |    INDEX RANGE SCAN                  | LINEITEM_SHIPDATE |  5916K|
+ | 10657   (1)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - access("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+    5780559  consistent gets
+          0  physical reads
+        124  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:16.26
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 466087209
+
+--------------------------------------------------------------------------------
+--------------------------
+
+| Id  | Operation                            | Name              | Rows  | Bytes
+ | Cost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+|   0 | SELECT STATEMENT                     |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   1 |  HASH GROUP BY                       |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   2 |   TABLE ACCESS BY INDEX ROWID BATCHED| LINEITEM          |  5956K|   380
+M|  3913K  (1)| 00:02:33 |
+
+|*  3 |    INDEX RANGE SCAN                  | LINEITEM_SHIPDATE |  5916K|
+ | 10657   (1)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - access("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
+
+
+Statistics
+----------------------------------------------------------
+         16  recursive calls
+          0  db block gets
+    5827651  consistent gets
+          0  physical reads
+        124  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:14.36
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 466087209
+
+--------------------------------------------------------------------------------
+--------------------------
+
+| Id  | Operation                            | Name              | Rows  | Bytes
+ | Cost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+|   0 | SELECT STATEMENT                     |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   1 |  HASH GROUP BY                       |                   |  5956K|   380
+M|  3914K  (1)| 00:02:33 |
+
+|   2 |   TABLE ACCESS BY INDEX ROWID BATCHED| LINEITEM          |  5956K|   380
+M|  3913K  (1)| 00:02:33 |
+
+|*  3 |    INDEX RANGE SCAN                  | LINEITEM_SHIPDATE |  5916K|
+ | 10657   (1)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+--------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - access("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd hh24:mi
+:ss'))
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 1 Sql Plan Directive used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+    5780559  consistent gets
+          0  physical reads
+        124  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed

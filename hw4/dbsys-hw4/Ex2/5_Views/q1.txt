@@ -1,0 +1,242 @@
+Elapsed: 00:00:04.39
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3011659849
+
+--------------------------------------------------------------------------------
+-------------------
+
+| Id  | Operation                     | Name              | Rows  | Bytes | Cost
+ (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+-------------------
+
+|   0 | SELECT STATEMENT              |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   1 |  HASH GROUP BY                |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_SHIPDATE |  6568K|   363M| 2909
+7   (1)| 00:00:02 |
+
+--------------------------------------------------------------------------------
+-------------------
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     107039  consistent gets
+     107033  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:04.40
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3011659849
+
+--------------------------------------------------------------------------------
+-------------------
+
+| Id  | Operation                     | Name              | Rows  | Bytes | Cost
+ (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+-------------------
+
+|   0 | SELECT STATEMENT              |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   1 |  HASH GROUP BY                |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_SHIPDATE |  6568K|   363M| 2909
+7   (1)| 00:00:02 |
+
+--------------------------------------------------------------------------------
+-------------------
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     107039  consistent gets
+     107033  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:05.05
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3011659849
+
+--------------------------------------------------------------------------------
+-------------------
+
+| Id  | Operation                     | Name              | Rows  | Bytes | Cost
+ (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+-------------------
+
+|   0 | SELECT STATEMENT              |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   1 |  HASH GROUP BY                |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_SHIPDATE |  6568K|   363M| 2909
+7   (1)| 00:00:02 |
+
+--------------------------------------------------------------------------------
+-------------------
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     107039  consistent gets
+     107033  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:04.14
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3011659849
+
+--------------------------------------------------------------------------------
+-------------------
+
+| Id  | Operation                     | Name              | Rows  | Bytes | Cost
+ (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+-------------------
+
+|   0 | SELECT STATEMENT              |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   1 |  HASH GROUP BY                |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_SHIPDATE |  6568K|   363M| 2909
+7   (1)| 00:00:02 |
+
+--------------------------------------------------------------------------------
+-------------------
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     107039  consistent gets
+     107033  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:04.37
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3011659849
+
+--------------------------------------------------------------------------------
+-------------------
+
+| Id  | Operation                     | Name              | Rows  | Bytes | Cost
+ (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+-------------------
+
+|   0 | SELECT STATEMENT              |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   1 |  HASH GROUP BY                |                   |  6568K|   363M| 2934
+2   (2)| 00:00:02 |
+
+|   2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_SHIPDATE |  6568K|   363M| 2909
+7   (1)| 00:00:02 |
+
+--------------------------------------------------------------------------------
+-------------------
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     107039  consistent gets
+     107033  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        551  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed

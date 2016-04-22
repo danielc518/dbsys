@@ -1,0 +1,297 @@
+Elapsed: 00:00:00.15
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2192673510
+
+--------------------------------------------------------------------------------
+-------------
+
+| Id  | Operation                     | Name        | Rows  | Bytes | Cost (%CPU
+)| Time     |
+
+--------------------------------------------------------------------------------
+-------------
+
+|   0 | SELECT STATEMENT              |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|   1 |  HASH GROUP BY                |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| L_C_O_S_N_R |  7093 |   616K|  7137   (1
+)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+-------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("L_C_O_S_N_R"."O_ORDERDATE">=TO_DATE(' 1994-01-01 00:00:00',
+              'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."O_ORDERDATE"<TO_DATE(
+' 1995-01-01
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."R_NAME"='A
+SIA')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+        108  recursive calls
+          0  db block gets
+      26425  consistent gets
+      26552  physical reads
+          0  redo size
+        842  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          4  sorts (memory)
+          0  sorts (disk)
+          5  rows processed
+
+
+
+Elapsed: 00:00:00.12
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2192673510
+
+--------------------------------------------------------------------------------
+-------------
+
+| Id  | Operation                     | Name        | Rows  | Bytes | Cost (%CPU
+)| Time     |
+
+--------------------------------------------------------------------------------
+-------------
+
+|   0 | SELECT STATEMENT              |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|   1 |  HASH GROUP BY                |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| L_C_O_S_N_R |  7093 |   616K|  7137   (1
+)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+-------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("L_C_O_S_N_R"."O_ORDERDATE">=TO_DATE(' 1994-01-01 00:00:00',
+              'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."O_ORDERDATE"<TO_DATE(
+' 1995-01-01
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."R_NAME"='A
+SIA')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      26288  consistent gets
+      26284  physical reads
+          0  redo size
+        842  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          5  rows processed
+
+
+
+Elapsed: 00:00:00.12
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2192673510
+
+--------------------------------------------------------------------------------
+-------------
+
+| Id  | Operation                     | Name        | Rows  | Bytes | Cost (%CPU
+)| Time     |
+
+--------------------------------------------------------------------------------
+-------------
+
+|   0 | SELECT STATEMENT              |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|   1 |  HASH GROUP BY                |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| L_C_O_S_N_R |  7093 |   616K|  7137   (1
+)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+-------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("L_C_O_S_N_R"."O_ORDERDATE">=TO_DATE(' 1994-01-01 00:00:00',
+              'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."O_ORDERDATE"<TO_DATE(
+' 1995-01-01
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."R_NAME"='A
+SIA')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      26288  consistent gets
+      26284  physical reads
+          0  redo size
+        842  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          5  rows processed
+
+
+
+Elapsed: 00:00:00.13
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2192673510
+
+--------------------------------------------------------------------------------
+-------------
+
+| Id  | Operation                     | Name        | Rows  | Bytes | Cost (%CPU
+)| Time     |
+
+--------------------------------------------------------------------------------
+-------------
+
+|   0 | SELECT STATEMENT              |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|   1 |  HASH GROUP BY                |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| L_C_O_S_N_R |  7093 |   616K|  7137   (1
+)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+-------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("L_C_O_S_N_R"."O_ORDERDATE">=TO_DATE(' 1994-01-01 00:00:00',
+              'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."O_ORDERDATE"<TO_DATE(
+' 1995-01-01
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."R_NAME"='A
+SIA')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      26288  consistent gets
+      26284  physical reads
+          0  redo size
+        842  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          5  rows processed
+
+
+
+Elapsed: 00:00:00.12
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2192673510
+
+--------------------------------------------------------------------------------
+-------------
+
+| Id  | Operation                     | Name        | Rows  | Bytes | Cost (%CPU
+)| Time     |
+
+--------------------------------------------------------------------------------
+-------------
+
+|   0 | SELECT STATEMENT              |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|   1 |  HASH GROUP BY                |             |  7093 |   616K|  7138   (1
+)| 00:00:01 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| L_C_O_S_N_R |  7093 |   616K|  7137   (1
+)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+-------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("L_C_O_S_N_R"."O_ORDERDATE">=TO_DATE(' 1994-01-01 00:00:00',
+              'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."O_ORDERDATE"<TO_DATE(
+' 1995-01-01
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "L_C_O_S_N_R"."R_NAME"='A
+SIA')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      26288  consistent gets
+      26284  physical reads
+          0  redo size
+        842  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          5  rows processed

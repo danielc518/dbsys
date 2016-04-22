@@ -1,0 +1,307 @@
+Elapsed: 00:00:01.87
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1479709278
+
+--------------------------------------------------------------------------------
+----------------------
+
+| Id  | Operation                      | Name                | Rows  | Bytes | C
+ost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+----------------------
+
+|   0 | SELECT STATEMENT               |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                 |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|*  2 |   HASH JOIN RIGHT SEMI         |                     |   991K|    83M| 9
+2272   (1)| 00:00:04 |
+
+|   3 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_ORDERKEY   |    57 |   741 |
+   2   (0)| 00:00:01 |
+
+|   4 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |  5899K|   421M| 9
+2249   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+----------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+         40  recursive calls
+          0  db block gets
+     340538  consistent gets
+     339715  physical reads
+        124  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:02.02
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1479709278
+
+--------------------------------------------------------------------------------
+----------------------
+
+| Id  | Operation                      | Name                | Rows  | Bytes | C
+ost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+----------------------
+
+|   0 | SELECT STATEMENT               |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                 |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|*  2 |   HASH JOIN RIGHT SEMI         |                     |   991K|    83M| 9
+2272   (1)| 00:00:04 |
+
+|   3 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_ORDERKEY   |    57 |   741 |
+   2   (0)| 00:00:01 |
+
+|   4 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |  5899K|   421M| 9
+2249   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+----------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     339724  consistent gets
+     339714  physical reads
+          0  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:01.67
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1479709278
+
+--------------------------------------------------------------------------------
+----------------------
+
+| Id  | Operation                      | Name                | Rows  | Bytes | C
+ost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+----------------------
+
+|   0 | SELECT STATEMENT               |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                 |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|*  2 |   HASH JOIN RIGHT SEMI         |                     |   991K|    83M| 9
+2272   (1)| 00:00:04 |
+
+|   3 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_ORDERKEY   |    57 |   741 |
+   2   (0)| 00:00:01 |
+
+|   4 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |  5899K|   421M| 9
+2249   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+----------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     339724  consistent gets
+     339714  physical reads
+          0  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:01.77
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1479709278
+
+--------------------------------------------------------------------------------
+----------------------
+
+| Id  | Operation                      | Name                | Rows  | Bytes | C
+ost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+----------------------
+
+|   0 | SELECT STATEMENT               |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                 |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|*  2 |   HASH JOIN RIGHT SEMI         |                     |   991K|    83M| 9
+2272   (1)| 00:00:04 |
+
+|   3 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_ORDERKEY   |    57 |   741 |
+   2   (0)| 00:00:01 |
+
+|   4 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |  5899K|   421M| 9
+2249   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+----------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     339724  consistent gets
+     339714  physical reads
+          0  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:01.76
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1479709278
+
+--------------------------------------------------------------------------------
+----------------------
+
+| Id  | Operation                      | Name                | Rows  | Bytes | C
+ost (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+----------------------
+
+|   0 | SELECT STATEMENT               |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                 |                     |   991K|    83M| 9
+2306   (1)| 00:00:04 |
+
+|*  2 |   HASH JOIN RIGHT SEMI         |                     |   991K|    83M| 9
+2272   (1)| 00:00:04 |
+
+|   3 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_ORDERKEY   |    57 |   741 |
+   2   (0)| 00:00:01 |
+
+|   4 |    MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |  5899K|   421M| 9
+2249   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+----------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     339724  consistent gets
+     339714  physical reads
+          0  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed

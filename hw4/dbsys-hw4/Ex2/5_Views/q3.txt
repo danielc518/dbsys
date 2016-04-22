@@ -1,0 +1,307 @@
+Elapsed: 00:00:01.74
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3035252327
+
+--------------------------------------------------------------------------------
+---------------------
+
+| Id  | Operation                     | Name                | Rows  | Bytes | Co
+st (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+---------------------
+
+|   0 | SELECT STATEMENT              |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |   147 | 12054 | 92
+260   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+---------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+,
+
+              'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."L_SHIPDATE">T
+O_DATE(' 1995-03-15
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."C_
+MKTSEGMENT"='BUILDING')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          1  recursive calls
+          0  db block gets
+     339721  consistent gets
+     339714  physical reads
+          0  redo size
+     446343  bytes sent via SQL*Net to client
+       9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:01.68
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3035252327
+
+--------------------------------------------------------------------------------
+---------------------
+
+| Id  | Operation                     | Name                | Rows  | Bytes | Co
+st (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+---------------------
+
+|   0 | SELECT STATEMENT              |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |   147 | 12054 | 92
+260   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+---------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+,
+
+              'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."L_SHIPDATE">T
+O_DATE(' 1995-03-15
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."C_
+MKTSEGMENT"='BUILDING')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     339721  consistent gets
+     339714  physical reads
+          0  redo size
+     446343  bytes sent via SQL*Net to client
+       9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:01.91
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3035252327
+
+--------------------------------------------------------------------------------
+---------------------
+
+| Id  | Operation                     | Name                | Rows  | Bytes | Co
+st (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+---------------------
+
+|   0 | SELECT STATEMENT              |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |   147 | 12054 | 92
+260   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+---------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+,
+
+              'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."L_SHIPDATE">T
+O_DATE(' 1995-03-15
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."C_
+MKTSEGMENT"='BUILDING')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     339721  consistent gets
+     339714  physical reads
+          0  redo size
+     446343  bytes sent via SQL*Net to client
+       9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:01.91
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3035252327
+
+--------------------------------------------------------------------------------
+---------------------
+
+| Id  | Operation                     | Name                | Rows  | Bytes | Co
+st (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+---------------------
+
+|   0 | SELECT STATEMENT              |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |   147 | 12054 | 92
+260   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+---------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+,
+
+              'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."L_SHIPDATE">T
+O_DATE(' 1995-03-15
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."C_
+MKTSEGMENT"='BUILDING')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     339721  consistent gets
+     339714  physical reads
+          0  redo size
+     446343  bytes sent via SQL*Net to client
+       9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:01.64
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3035252327
+
+--------------------------------------------------------------------------------
+---------------------
+
+| Id  | Operation                     | Name                | Rows  | Bytes | Co
+st (%CPU)| Time     |
+
+--------------------------------------------------------------------------------
+---------------------
+
+|   0 | SELECT STATEMENT              |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|   1 |  HASH GROUP BY                |                     |   147 | 12054 | 92
+261   (1)| 00:00:04 |
+
+|*  2 |   MAT_VIEW REWRITE ACCESS FULL| LINEITEM_CUST_ORDER |   147 | 12054 | 92
+260   (1)| 00:00:04 |
+
+--------------------------------------------------------------------------------
+---------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+,
+
+              'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."L_SHIPDATE">T
+O_DATE(' 1995-03-15
+
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND "LINEITEM_CUST_ORDER"."C_
+MKTSEGMENT"='BUILDING')
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+     339721  consistent gets
+     339714  physical reads
+          0  redo size
+     446343  bytes sent via SQL*Net to client
+       9066  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed

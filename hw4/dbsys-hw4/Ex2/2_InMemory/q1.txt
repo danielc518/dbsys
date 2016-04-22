@@ -1,0 +1,282 @@
+Elapsed: 00:00:05.09
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1773397105
+
+--------------------------------------------------------------------------------
+--------
+
+| Id  | Operation                   | Name     | Rows  | Bytes | Cost (%CPU)| Ti
+me     |
+
+--------------------------------------------------------------------------------
+--------
+
+|   0 | SELECT STATEMENT            |          |  6657K|   425M|  1603  (33)| 00
+:00:01 |
+
+|   1 |  HASH GROUP BY              |          |  6657K|   425M|  1603  (33)| 00
+:00:01 |
+
+|*  2 |   TABLE ACCESS INMEMORY FULL| LINEITEM |  6657K|   425M|  1354  (20)| 00
+:00:01 |
+
+--------------------------------------------------------------------------------
+--------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - inmemory("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+       filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+         67  recursive calls
+          0  db block gets
+     108698  consistent gets
+          0  physical reads
+        124  redo size
+       1694  bytes sent via SQL*Net to client
+        551  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          5  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:04.34
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1773397105
+
+--------------------------------------------------------------------------------
+--------
+
+| Id  | Operation                   | Name     | Rows  | Bytes | Cost (%CPU)| Ti
+me     |
+
+--------------------------------------------------------------------------------
+--------
+
+|   0 | SELECT STATEMENT            |          |  6657K|   425M|  1608  (33)| 00
+:00:01 |
+
+|   1 |  HASH GROUP BY              |          |  6657K|   425M|  1608  (33)| 00
+:00:01 |
+
+|*  2 |   TABLE ACCESS INMEMORY FULL| LINEITEM |  6657K|   425M|  1359  (20)| 00
+:00:01 |
+
+--------------------------------------------------------------------------------
+--------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - inmemory("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+       filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+          3  consistent gets
+          0  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:05.08
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1773397105
+
+--------------------------------------------------------------------------------
+--------
+
+| Id  | Operation                   | Name     | Rows  | Bytes | Cost (%CPU)| Ti
+me     |
+
+--------------------------------------------------------------------------------
+--------
+
+|   0 | SELECT STATEMENT            |          |  6657K|   425M|  1608  (33)| 00
+:00:01 |
+
+|   1 |  HASH GROUP BY              |          |  6657K|   425M|  1608  (33)| 00
+:00:01 |
+
+|*  2 |   TABLE ACCESS INMEMORY FULL| LINEITEM |  6657K|   425M|  1359  (20)| 00
+:00:01 |
+
+--------------------------------------------------------------------------------
+--------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - inmemory("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+       filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+          3  consistent gets
+          0  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:04.80
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1773397105
+
+--------------------------------------------------------------------------------
+--------
+
+| Id  | Operation                   | Name     | Rows  | Bytes | Cost (%CPU)| Ti
+me     |
+
+--------------------------------------------------------------------------------
+--------
+
+|   0 | SELECT STATEMENT            |          |  6657K|   425M|  1608  (33)| 00
+:00:01 |
+
+|   1 |  HASH GROUP BY              |          |  6657K|   425M|  1608  (33)| 00
+:00:01 |
+
+|*  2 |   TABLE ACCESS INMEMORY FULL| LINEITEM |  6657K|   425M|  1359  (20)| 00
+:00:01 |
+
+--------------------------------------------------------------------------------
+--------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - inmemory("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+       filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+          3  consistent gets
+          0  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed
+
+
+
+Elapsed: 00:00:04.96
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1773397105
+
+--------------------------------------------------------------------------------
+--------
+
+| Id  | Operation                   | Name     | Rows  | Bytes | Cost (%CPU)| Ti
+me     |
+
+--------------------------------------------------------------------------------
+--------
+
+|   0 | SELECT STATEMENT            |          |  6657K|   425M|  1608  (33)| 00
+:00:01 |
+
+|   1 |  HASH GROUP BY              |          |  6657K|   425M|  1608  (33)| 00
+:00:01 |
+
+|*  2 |   TABLE ACCESS INMEMORY FULL| LINEITEM |  6657K|   425M|  1359  (20)| 00
+:00:01 |
+
+--------------------------------------------------------------------------------
+--------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - inmemory("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+       filter("L_SHIPDATE"<=TO_DATE(' 1998-09-02 00:00:00', 'syyyy-mm-dd
+              hh24:mi:ss'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+          3  consistent gets
+          0  physical reads
+          0  redo size
+       1694  bytes sent via SQL*Net to client
+        551  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          4  rows processed

@@ -1,0 +1,407 @@
+Elapsed: 00:00:00.45
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1384268742
+
+--------------------------------------------------------------------------------
+--
+
+| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
+ |
+
+--------------------------------------------------------------------------------
+--
+
+|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
+ |
+
+|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
+ |
+
+|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
+ |
+
+|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
+ |
+
+|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
+ |
+
+--------------------------------------------------------------------------------
+--
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("O_CUSTKEY"="C_CUSTKEY")
+   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
+              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
+L")
+
+              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
+              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17')))
+   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
+              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 2 Sql Plan Directives used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      30950  consistent gets
+          0  physical reads
+        204  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed
+
+
+
+Elapsed: 00:00:00.40
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1384268742
+
+--------------------------------------------------------------------------------
+--
+
+| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
+ |
+
+--------------------------------------------------------------------------------
+--
+
+|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
+ |
+
+|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
+ |
+
+|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
+ |
+
+|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
+ |
+
+|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
+ |
+
+--------------------------------------------------------------------------------
+--
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("O_CUSTKEY"="C_CUSTKEY")
+   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
+              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
+L")
+
+              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
+              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17')))
+   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
+              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 2 Sql Plan Directives used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      30950  consistent gets
+          0  physical reads
+        204  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed
+
+
+
+Elapsed: 00:00:00.39
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1384268742
+
+--------------------------------------------------------------------------------
+--
+
+| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
+ |
+
+--------------------------------------------------------------------------------
+--
+
+|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
+ |
+
+|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
+ |
+
+|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
+ |
+
+|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
+ |
+
+|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
+ |
+
+--------------------------------------------------------------------------------
+--
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("O_CUSTKEY"="C_CUSTKEY")
+   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
+              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
+L")
+
+              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
+              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17')))
+   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
+              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 2 Sql Plan Directives used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      30950  consistent gets
+          0  physical reads
+        204  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed
+
+
+
+Elapsed: 00:00:00.38
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1384268742
+
+--------------------------------------------------------------------------------
+--
+
+| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
+ |
+
+--------------------------------------------------------------------------------
+--
+
+|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
+ |
+
+|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
+ |
+
+|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
+ |
+
+|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
+ |
+
+|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
+ |
+
+--------------------------------------------------------------------------------
+--
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("O_CUSTKEY"="C_CUSTKEY")
+   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
+              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
+L")
+
+              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
+              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17')))
+   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
+              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 2 Sql Plan Directives used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      30950  consistent gets
+          0  physical reads
+        204  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed
+
+
+
+Elapsed: 00:00:00.47
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1384268742
+
+--------------------------------------------------------------------------------
+--
+
+| Id  | Operation             | Name     | Rows  | Bytes | Cost (%CPU)| Time
+ |
+
+--------------------------------------------------------------------------------
+--
+
+|   0 | SELECT STATEMENT      |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|   1 |  HASH GROUP BY        |          |     5 |   160 |  8413   (1)| 00:00:01
+ |
+
+|*  2 |   HASH JOIN ANTI      |          |     5 |   160 |  7474   (1)| 00:00:01
+ |
+
+|*  3 |    TABLE ACCESS FULL  | CUSTOMER |   510 | 13770 |   934   (1)| 00:00:01
+ |
+
+|   4 |     SORT AGGREGATE    |          |     1 |    22 |            |
+ |
+
+|*  5 |      TABLE ACCESS FULL| CUSTOMER | 44719 |   960K|   939   (1)| 00:00:01
+ |
+
+|   6 |    TABLE ACCESS FULL  | ORDERS   |  1500K|  7324K|  6535   (1)| 00:00:01
+ |
+
+--------------------------------------------------------------------------------
+--
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("O_CUSTKEY"="C_CUSTKEY")
+   3 - filter((SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31'
+              OR SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17') AND "C_ACCTBAL"> (SELECT AVG("C_ACCTBA
+L")
+
+              FROM "CUSTOMER" "CUSTOMER" WHERE "C_ACCTBAL">0.00 AND
+              (SUBSTR("C_PHONE",1,2)='13' OR SUBSTR("C_PHONE",1,2)='31' OR
+              SUBSTR("C_PHONE",1,2)='23' OR SUBSTR("C_PHONE",1,2)='29' OR
+              SUBSTR("C_PHONE",1,2)='30' OR SUBSTR("C_PHONE",1,2)='18' OR
+              SUBSTR("C_PHONE",1,2)='17')))
+   5 - filter("C_ACCTBAL">0.00 AND (SUBSTR("C_PHONE",1,2)='13' OR
+              SUBSTR("C_PHONE",1,2)='31' OR SUBSTR("C_PHONE",1,2)='23' OR
+              SUBSTR("C_PHONE",1,2)='29' OR SUBSTR("C_PHONE",1,2)='30' OR
+              SUBSTR("C_PHONE",1,2)='18' OR SUBSTR("C_PHONE",1,2)='17'))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - 2 Sql Plan Directives used for this statement
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      30950  consistent gets
+          0  physical reads
+        204  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed

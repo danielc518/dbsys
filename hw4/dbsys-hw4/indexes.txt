@@ -1,0 +1,75 @@
+create index lineitem_shipdate on lineitem(l_shipdate);
+create index orders_orderdate on orders(o_orderdate);
+create index lineitem_orderkey on lineitem(l_orderkey);
+create index orders_orderkey on orders(o_orderkey);
+create index customer_custkey on customer(c_custkey);
+create index orders_custkey on orders(o_custkey);
+create index lineitem_suppkey on lineitem(l_suppkey);
+create index customer_nationkey on customer(c_nationkey);
+create index nation_regionkey on nation(n_regionkey);
+create index region_regionkey on region(r_regionkey);
+create index supplier_nationkey on supplier(s_nationkey);
+create index nation_nationkey on nation(n_nationkey);
+create index lineitem_quantity on lineitem(l_quantity);
+create index lineitem_discount on lineitem(l_discount);
+create index customer_phone on customer(c_phone);
+create index customer_acctbal on customer(c_acctbal);
+create index region_name on region(r_name);
+
+drop index lineitem_shipdate;
+drop index orders_orderdate;
+drop index lineitem_orderkey;
+drop index orders_orderkey;
+drop index customer_custkey;
+drop index orders_custkey;
+drop index lineitem_suppkey;
+drop index customer_nationkey;
+drop index nation_regionkey;
+drop index region_regionkey;
+drop index supplier_nationkey;
+drop index nation_nationkey;
+drop index lineitem_quantity;
+drop index lineitem_discount;
+drop index customer_phone;
+drop index customer_acctbal;
+drop index region_name;
+
+Q1.
+/*+INDEX(lineitem lineitem_shipdate)*/
+
+Q3.
+/*+INDEX(lineitem lineitem_orderkey)i*/
+/*+INDEX(lineitem lineitem_shipdate)*/
+/*+INDEX(orders orders_orderkey)*/
+/*+INDEX(orders orders_custkey)*/
+
+Q5.
+/*+INDEX(orders orders_custkey)*/
+/*+INDEX(customer customer_custkey)*/
+/*+INDEX(lineitem lineitem_orderkey)i*/
+/*+INDEX(lineitem lineitem_suppkey)*/
+/*+INDEX(orders orders_orderkey)*/
+/*+INDEX(customer customer_nationkey)*/
+/*+INDEX(supplier supplier_nationkey)*/
+/*+INDEX(nation nation_nationkey)*/
+/*+INDEX(region region_regionkey)*/
+/*+INDEX(region region_name)*/
+
+Q6.
+/*+INDEX(lineitem lineitem_shipdate)*/
+/*+INDEX(lineitem lineitem_quantity)*/
+/*+INDEX(lineitem lineitem_discount)*/
+
+Q18.
+/*+INDEX(lineitem lineitem_orderkey)i*/
+/*+INDEX(orders orders_orderkey)*/
+/*+INDEX(lineitem lineitem_quantity)*/
+/*+INDEX(customer customer_custkey)*/
+/*+INDEX(orders orders_custkey)*/
+
+Q22.
+/*+INDEX(customer customer_phone)*/
+/*+INDEX(customer customer_acctbal)*/
+/*+INDEX(customer customer_custkey)*/
+/*+INDEX(orders orders_custkey)*/
+
