@@ -1,0 +1,312 @@
+Elapsed: 00:00:00.01
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 406512715
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+| Id  | Operation                                    | Name     | Rows  | Bytes
+| Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |          |     7 |    42
+|     3  (34)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |          |       |
+|            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |          |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| SUBQUERY |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+          8  consistent gets
+          0  physical reads
+          0  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed
+
+
+
+Elapsed: 00:00:00.03
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 406512715
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+| Id  | Operation                                    | Name     | Rows  | Bytes
+| Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |          |     7 |    42
+|     3  (34)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |          |       |
+|            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |          |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| SUBQUERY |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+          8  consistent gets
+          0  physical reads
+          0  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed
+
+
+
+Elapsed: 00:00:00.02
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 406512715
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+| Id  | Operation                                    | Name     | Rows  | Bytes
+| Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |          |     7 |    42
+|     3  (34)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |          |       |
+|            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |          |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| SUBQUERY |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+          8  consistent gets
+          0  physical reads
+          0  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed
+
+
+
+Elapsed: 00:00:00.01
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 406512715
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+| Id  | Operation                                    | Name     | Rows  | Bytes
+| Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |          |     7 |    42
+|     3  (34)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |          |       |
+|            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |          |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| SUBQUERY |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+          8  consistent gets
+          0  physical reads
+          0  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed
+
+
+
+Elapsed: 00:00:00.02
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 406512715
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+| Id  | Operation                                    | Name     | Rows  | Bytes
+| Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |          |     7 |    42
+|     3  (34)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |          |       |
+|            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000 |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |          |     7 |    42
+|     3  (34)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |          |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| SUBQUERY |  6384 | 38304
+|     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------
+
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+          8  consistent gets
+          0  physical reads
+          0  redo size
+        855  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          7  rows processed

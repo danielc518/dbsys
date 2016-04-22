@@ -1,0 +1,427 @@
+Elapsed: 00:00:00.58
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 559871819
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+| Id  | Operation                                    | Name                | Row
+s  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |                     | 116
+20 |   419K| 13912   (1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |                     |
+   |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001            | 116
+20 |   419K| 13912   (1)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |                     | 116
+20 |   419K| 13912   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |                     | 116
+20 |   419K| 13912   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000            | 116
+20 |   419K| 13912   (1)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |                     | 116
+20 |   419K| 13912   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |                     | 318
+48 |  1150K| 13911   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|*  8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER | 318
+48 |  1150K| 13911   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   8 - inmemory("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:0
+0', 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+       filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+, 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     178217  consistent gets
+          0  physical reads
+          0  redo size
+     446311  bytes sent via SQL*Net to client
+       9065  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:00.59
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 559871819
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+| Id  | Operation                                    | Name                | Row
+s  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |                     | 116
+20 |   419K|  9612   (1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |                     |
+   |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001            | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |                     | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |                     | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000            | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |                     | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |                     | 318
+48 |  1150K|  9610   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|*  8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER | 318
+48 |  1150K|  9610   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   8 - inmemory("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:0
+0', 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+       filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+, 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     148521  consistent gets
+          0  physical reads
+          0  redo size
+     446295  bytes sent via SQL*Net to client
+       9065  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:00.38
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 559871819
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+| Id  | Operation                                    | Name                | Row
+s  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |                     | 116
+20 |   419K|  9612   (1)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |                     |
+   |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001            | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |                     | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |                     | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000            | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |                     | 116
+20 |   419K|  9612   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |                     | 318
+48 |  1150K|  9610   (1)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|*  8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER | 318
+48 |  1150K|  9610   (1)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   8 - inmemory("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:0
+0', 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+       filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+, 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+     118825  consistent gets
+          0  physical reads
+          0  redo size
+     446319  bytes sent via SQL*Net to client
+       9065  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:00.31
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 559871819
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+| Id  | Operation                                    | Name                | Row
+s  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |                     | 116
+20 |   419K|  5311   (2)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |                     |
+   |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001            | 116
+20 |   419K|  5311   (2)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |                     | 116
+20 |   419K|  5311   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |                     | 116
+20 |   419K|  5311   (2)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000            | 116
+20 |   419K|  5311   (2)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |                     | 116
+20 |   419K|  5311   (2)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |                     | 318
+48 |  1150K|  5310   (2)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|*  8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER | 318
+48 |  1150K|  5310   (2)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   8 - inmemory("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:0
+0', 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+       filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+, 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+      59433  consistent gets
+          0  physical reads
+          0  redo size
+     446287  bytes sent via SQL*Net to client
+       9065  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed
+
+
+
+Elapsed: 00:00:00.28
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 559871819
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+| Id  | Operation                                    | Name                | Row
+s  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                             |                     | 116
+20 |   419K|  1009   (7)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                              |                     |
+   |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                        | :TQ10001            | 116
+20 |   419K|  1009   (7)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                             |                     | 116
+20 |   419K|  1009   (7)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                               |                     | 116
+20 |   419K|  1009   (7)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                            | :TQ10000            | 116
+20 |   419K|  1009   (7)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                          |                     | 116
+20 |   419K|  1009   (7)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   7 |        PX BLOCK ITERATOR                     |                     | 318
+48 |  1150K|  1008   (7)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|*  8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER | 318
+48 |  1150K|  1008   (7)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+-----------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   8 - inmemory("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:0
+0', 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+       filter("LINEITEM_CUST_ORDER"."O_ORDERDATE"<TO_DATE(' 1995-03-15 00:00:00'
+, 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."L_SHIPDATE">TO_DATE(' 1995-03-15 00:00:00',
+ 'syyyy-mm-dd hh24:mi:ss') AND
+
+              "LINEITEM_CUST_ORDER"."C_MKTSEGMENT"='BUILDING')
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+         41  consistent gets
+          0  physical reads
+          0  redo size
+     446311  bytes sent via SQL*Net to client
+       9065  bytes received via SQL*Net from client
+        776  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      11620  rows processed

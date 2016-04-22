@@ -1,0 +1,402 @@
+Elapsed: 00:00:00.29
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3043697411
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+| Id  | Operation                                     | Name                | Ro
+ws  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                               |                     |
+    |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                         | :TQ10001            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                                |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                             | :TQ10000            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                           |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|*  7 |        HASH JOIN RIGHT SEMI                   |                     |
+228 | 10488 |   999   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL | LINEITEM_ORDERKEY   |
+ 57 |   285 |     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   9 |         PX BLOCK ITERATOR                     |                     |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  10 |          MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+         53  consistent gets
+          0  physical reads
+          0  redo size
+       4367  bytes sent via SQL*Net to client
+        584  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:00.27
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3043697411
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+| Id  | Operation                                     | Name                | Ro
+ws  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                               |                     |
+    |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                         | :TQ10001            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                                |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                             | :TQ10000            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                           |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|*  7 |        HASH JOIN RIGHT SEMI                   |                     |
+228 | 10488 |   999   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL | LINEITEM_ORDERKEY   |
+ 57 |   285 |     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   9 |         PX BLOCK ITERATOR                     |                     |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  10 |          MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+         53  consistent gets
+          0  physical reads
+          0  redo size
+       4363  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:00.28
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3043697411
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+| Id  | Operation                                     | Name                | Ro
+ws  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                               |                     |
+    |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                         | :TQ10001            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                                |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                             | :TQ10000            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                           |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|*  7 |        HASH JOIN RIGHT SEMI                   |                     |
+228 | 10488 |   999   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL | LINEITEM_ORDERKEY   |
+ 57 |   285 |     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   9 |         PX BLOCK ITERATOR                     |                     |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  10 |          MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+         53  consistent gets
+          0  physical reads
+          0  redo size
+       4371  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:00.27
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3043697411
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+| Id  | Operation                                     | Name                | Ro
+ws  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                               |                     |
+    |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                         | :TQ10001            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                                |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                             | :TQ10000            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                           |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|*  7 |        HASH JOIN RIGHT SEMI                   |                     |
+228 | 10488 |   999   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL | LINEITEM_ORDERKEY   |
+ 57 |   285 |     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   9 |         PX BLOCK ITERATOR                     |                     |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  10 |          MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+         53  consistent gets
+          0  physical reads
+          0  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
+
+
+
+Elapsed: 00:00:00.28
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3043697411
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+| Id  | Operation                                     | Name                | Ro
+ws  | Bytes | Cost (%CPU)| Time     |    TQ  |IN-OUT| PQ Distrib |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+|   0 | SELECT STATEMENT                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |        |      |            |
+
+|   1 |  PX COORDINATOR                               |                     |
+    |       |            |          |        |      |            |
+
+|   2 |   PX SEND QC (RANDOM)                         | :TQ10001            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | P->S | QC (RAND)  |
+
+|   3 |    HASH GROUP BY                              |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   4 |     PX RECEIVE                                |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,01 | PCWP |            |
+
+|   5 |      PX SEND HASH                             | :TQ10000            |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | P->P | HASH       |
+
+|   6 |       HASH GROUP BY                           |                     |
+228 | 10488 |  1000   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|*  7 |        HASH JOIN RIGHT SEMI                   |                     |
+228 | 10488 |   999   (6)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   8 |         MAT_VIEW REWRITE ACCESS INMEMORY FULL | LINEITEM_ORDERKEY   |
+ 57 |   285 |     2   (0)| 00:00:01 |  Q1,00 | PCWP |            |
+
+|   9 |         PX BLOCK ITERATOR                     |                     |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWC |            |
+
+|  10 |          MAT_VIEW REWRITE ACCESS INMEMORY FULL| LINEITEM_CUST_ORDER |  6
+001K|   234M|   992   (5)| 00:00:01 |  Q1,00 | PCWP |            |
+
+--------------------------------------------------------------------------------
+------------------------------------------------------------------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   7 - access("LINEITEM_CUST_ORDER"."O_ORDERKEY"="LINEITEM_ORDERKEY"."L_ORDERKEY
+")
+
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=AUTO)
+   - Degree of Parallelism is 4 because of table property
+
+
+Statistics
+----------------------------------------------------------
+         24  recursive calls
+          0  db block gets
+         53  consistent gets
+          0  physical reads
+          0  redo size
+       4367  bytes sent via SQL*Net to client
+        585  bytes received via SQL*Net from client
+          5  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+         57  rows processed
