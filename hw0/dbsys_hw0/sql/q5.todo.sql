@@ -12,28 +12,37 @@
 --  3) You may use a SQL 'WITH' clause.
 
 -- Student SQL code here:
-
-WITH yearly_orders AS -- table of total number of orders per year grouped by customer market segments
-  (SELECT COUNT(o_orderkey) AS total_orders,
-          CAST(strftime('%Y', o_orderdate) AS INTEGER) AS o_year,
-          c_mktsegment
-   FROM orders,
-        customer
-   WHERE o_custkey = c_custkey
-   GROUP BY c_mktsegment,
-            o_year)
--- Finds difference between two years by joining 'yearly_orders' with 'yearly_orders' shifted by 1 year
--- e.g. 123|1995|MACHINERY|456|1994|MACHINERY
-SELECT t1.c_mktsegment, max_year, (t2.total_orders - t1.total_orders)
-FROM (yearly_orders t1
-      INNER JOIN yearly_orders t2 ON t1.o_year = t2.o_year + 1
-      AND t1.c_mktsegment = t2.c_mktsegment) t3,
-
-  (SELECT MAX(o_year) AS max_year,
-                         c_mktsegment
-   FROM yearly_orders
-   GROUP BY c_mktsegment) t4
-WHERE t1.o_year = t4.max_year
-  AND t1.c_mktsegment = t4.c_mktsegment
-  AND t2.total_orders - t1.total_orders > 0
-ORDER BY t1.c_mktsegment ASC;
+WITH quantity_per_segment_year AS (
+  SELECT
+    c_mktsegment, CAST(strftime('%Y', o_orderdate) as INTEGER) as year, COUNT(o_orderkey) as num_orders
+  FROM
+    orders,
+    customer
+  WHERE
+    o_custkey = c_custkey
+  GROUP BY
+    c_mktsegment, year
+)
+SELECT
+  T1.c_mktsegment, T1.last_year, T2.num_orders - T3.num_orders as difference
+FROM
+  (SELECT
+    c_mktsegment, MAX(CAST(strftime('%Y', o_orderdate) as INTEGER)) as last_year
+  FROM
+    orders,
+    customer
+  WHERE
+    o_custkey = c_custkey
+  GROUP BY
+    c_mktsegment
+  ) as T1,
+  quantity_per_segment_year as T2,
+  quantity_per_segment_year as T3
+WHERE
+  T1.c_mktsegment = T2.c_mktsegment
+  and T1.last_year = T2.year
+  and T2.c_mktsegment = T3.c_mktsegment
+  and T2.year = T3.year + 1
+  and difference < 0
+ORDER BY
+  T1.c_mktsegment asc;

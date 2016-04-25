@@ -9,18 +9,17 @@
 --  3) Assume that a package cannot be received before it is shipped.
 
 -- Student SQL code here:
-
-SELECT c.c_custkey,
-       c.c_name,
-       AVG(DATE(l.l_receiptdate) - DATE(l.l_shipdate)) AS avgwait
-FROM customer c,
-     orders o,
-     lineitem l
-WHERE c.c_custkey = o.o_custkey
-  AND o.o_orderkey = l.l_orderkey
-GROUP BY c.c_custkey
-ORDER BY avgwait DESC LIMIT 10;
-
-
-
-
+SELECT
+  c_custkey, c_name, AVG(DATE(l_receiptdate) - DATE(l_shipdate)) as avg_wait
+FROM
+  lineitem,
+  orders,
+  customer
+WHERE
+  l_orderkey = o_orderkey
+  and o_custkey = c_custkey
+GROUP BY
+  c_custkey, c_name
+ORDER BY
+  avg_wait desc
+LIMIT 10;

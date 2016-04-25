@@ -4,13 +4,16 @@
 -- Order by: by quantity returned, descending.
 
 -- Student SQL code here:
-
-SELECT l_partkey,
-       p_name,
-       SUM(l_quantity) AS total_quantity
-FROM lineitem,
-     part
-WHERE l_partkey = p_partkey
-  AND l_returnflag = 'R'
-GROUP BY p_partkey
-ORDER BY total_quantity DESC LIMIT 10;
+SELECT
+  l_partkey, p_name, SUM(l_quantity) as quantity
+FROM
+  lineitem,
+  part
+WHERE
+  l_returnflag = 'R'
+  and l_partkey = p_partkey
+GROUP BY
+  l_partkey
+ORDER BY
+  quantity desc
+LIMIT 10;

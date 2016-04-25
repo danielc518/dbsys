@@ -7,41 +7,36 @@
 --   2) A single nation may have more than 1 most-heavily-ordered-part.
 
 -- Student SQL code here:
-
-WITH total_quantity AS
--- sum of quantities grouped by nation and part
-  (SELECT SUM(l_quantity) AS t_quantity,
-          n_nationkey,
-          n_name,
-          p_partkey,
-          p_name
-   FROM lineitem,
-        orders,
-        customer,
-        nation,
-        part
-   WHERE l_orderkey = o_orderkey
-     AND o_custkey = c_custkey
-     AND c_nationkey = n_nationkey
-     AND l_partkey = p_partkey
-   GROUP BY n_nationkey,
-            n_name,
-            p_partkey,
-            p_name
-   ORDER BY SUM(l_quantity))
--- query items that have sum of quantities = max(sum of quantities)
-SELECT n_nationkey,
-       n_name,
-       p_partkey,
-       p_name,
-       t_quantity
-FROM total_quantity,
-  (SELECT MAX(t_quantity) AS max_quantity,
-          n_nationkey AS t_nationkey
-   FROM total_quantity
-   GROUP BY n_nationkey)
-WHERE t_quantity = max_quantity
-  AND n_nationkey = t_nationkey
-ORDER BY n_nationkey,
-         p_partkey ASC;
-
+WITH quantity_per_np AS (
+  SELECT
+    c_nationkey, l_partkey, SUM(l_quantity) as quantity
+  FROM
+    lineitem,
+    orders,
+    customer
+  WHERE
+    l_orderkey = o_orderkey
+    and o_custkey = c_custkey
+  GROUP BY
+    c_nationkey, l_partkey
+)
+SELECT
+  n_nationkey, n_name, p_partkey, p_name, T1.max as quantity
+FROM
+  (SELECT
+    c_nationkey, MAX(quantity) as max
+  FROM
+    quantity_per_np
+  GROUP BY
+    c_nationkey
+  ) as T1,
+  quantity_per_np as T2,
+  nation,
+  part
+WHERE
+  T1.c_nationkey = T2.c_nationkey
+  and T1.max = T2.quantity
+  and T1.c_nationkey = n_nationkey
+  and T2.l_partkey = p_partkey
+ORDER BY
+  n_nationkey, p_partkey asc;
